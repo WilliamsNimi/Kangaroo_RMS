@@ -1,0 +1,45 @@
+title Recruiter's Flow on Kangaroo
+
+participant Recruiter
+participant System
+participant Applicant
+participant Assessors
+
+Business Partner->System:Login to the system
+System->Business Partner:Show requisition dashboard and stages of vacancies(Accepted, Rejected, accepting applications, etc)
+Business Partner->System:Create new Requisition
+System->System:Add vacancy to waitlist table, update the recruiter requests db, show success message to BP and return to dashboard
+Recruiter->System:Login to the system
+System->Recruiter:Serve recruiter's dashboard containing all active vacancies and the various stages
+Recruiter->System:View all Requisitions
+Recruiter->System:Accept or Reject New Requisitions
+System->System:Add the vacancy to database if accepted.
+System->Business Partner:Send notification on vacancy request, accepted or rejected.
+Recruiter->System:Create new Vacancy
+System->System: Add Vacancy to database
+Recruiter->System:Create stages for that particular recruitment
+System->System: Update Vacancy table stages column with stages created
+Recruiter->System:Publish Vacancy to job boards such as linkedin, etc
+System->System: Generate job sharing/application link
+System->Recruiter:Display link in a popup to recruiter
+Recruiter->System: Go back to Dashboard
+System->Recruiter: Display Dashboard to recruiter
+Applicant->System: Sign up for the platform
+System->Applicant: Generate authentication code and ask user to verify email
+System->System: Add new applicant to candidates DB
+System->Applicant: Display applicant's dashboard and profile
+Applicant->System: Click on available vacancies
+System->Applicant: Show available vacancies using pagination and allow for filter
+Applicant->System: Apply for jobs using a form and upload CV
+System->Applicant: Show application successful
+System->System: Update Candidate's DB with jobs applicant has applied for
+System->System: Update Vacancy DB with Applicant ID
+Recruiter->System: Click on vacancy to check on applicants
+System->Recruiter: Display applicants to recruiter with short summary of number of applicants and the demographic. Allow for filteration by various columns
+Recruiter->System: Filter and send successful and unsuccessful candidates emails
+System->Applicant: Send email based on status of application
+System->System: Update candidate's DB with relevant status on jobs applied for
+System->System: update vacancy db with applicant's status
+Recruiter->System: Add meeting invite and schedule candidates and assessors for an interview.
+System->Applicant: Send email scheduling applicant for interview
+System->Assessors: Send email with interview details, applicant's details, and assessment link.
