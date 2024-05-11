@@ -23,3 +23,5 @@ print(vacancy.business_partner)
 new_db.add_recruiter("nimi.williams@sterling.ng", "Nimi Williams")
 recruiter = new_db.find_recruiter_by(email="nimi.williams@sterling.ng")
 print(recruiter.recruiter_id)
+
+new_db.add_applications(applicant.applicant_id, vacancy.job_id)

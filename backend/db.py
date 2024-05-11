@@ -167,3 +167,17 @@ class DB:
                 setattr(vacancy, key, value)
         self._session.commit()
         return None
+
+    def add_applications(self, applicant_id, job_id):
+        """ This function logs every application in the applicants_vacancy table
+        """
+        try:
+            application = ApplicantsVacancy(applicant_id = applicant_id, job_id=job_id)
+            self._session.add(application)
+            self._session.commit()
+            print("You have a new application")
+            return application
+        except (InvalidRequestError, NoResultFound) as err:
+            self._session.rollback()
+            print(err)
+            return None
