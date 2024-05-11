@@ -47,10 +47,20 @@ class DB:
             print(err)
             return None
 
-    def add_recruiter(self) -> Recruiter:
+    def add_recruiter(self, email, full_name) -> Recruiter:
         """ This method adds a recruiter to the db
         Return: Returns the new recruiter object
         """
+        try:
+            recruiter_id = uuid.uuid4()
+            recruiter = Recruiter(full_name = full_name, email = email, recruiter_id = str(recruiter_id))
+            self._session.add(recruiter)
+            self._session.commit()
+            return recruiter
+        except (InvalidRequestError, NoResultFound) as err:
+            self._session.rollback()
+            print(err)
+            return None
     def add_vacancy(self, j_title, dept, unit, l_manager, no_open_pos,
     date_of_req, bp, location, jd_summary) -> Vacancy:
         """ This method adds a Vacancy to the db
@@ -94,6 +104,19 @@ class DB:
         @query_str: the query to search for
         Return: Returns the first row where the recruiter is found
         """
+        recruiters = self._session.query(Recruiter)
+        if not recruiters:
+            raise NoResultFound
+        if not kwargs:
+            raise InvalidRequestError
+        for key in kwargs.keys():
+            if not hasattr(Recruiter, key):
+                raise InvalidRequestError
+        recruiter_found = self._session.query(Recruiter).filter_by(**kwargs).first()
+        if not recruiter_found:
+            raise NoResultFound
+        return recruiter_found
+    
     def find_vacancy_by(self, **kwargs) -> Vacancy:
         """ A method to search the db
         @query_str: the query to search for
