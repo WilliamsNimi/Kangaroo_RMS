@@ -8,7 +8,7 @@ Base = declarative_base()
 class Applicant(Base):
     """ The Applicant Model class"""
     __tablename__ = 'applicants'
-    id = Column(Integer)
+    id = Column(Integer, autoincrement=True)
     first_name = Column(String(250))
     last_name = Column(String(250))
     gender = Column(String(250))
@@ -28,7 +28,7 @@ class Applicant(Base):
 class Recruiter(Base):
     """ The Recruiter Model class"""
     __tablename__ = 'recruiters'
-    id = Column(Integer)
+    id = Column(Integer, autoincrement=True)
     email = Column(String(250))
     full_name = Column(String(250))
     job_role = Column(String(250))
@@ -38,7 +38,7 @@ class Recruiter(Base):
 class Vacancy(Base):
     """ The Vacancy Model class"""
     __tablename__ = 'vacancy'
-    id = Column(Integer)
+    id = Column(Integer, autoincrement=True)
     job_id = Column(String(250), primary_key=True)
     job_title = Column(String(250))
     department = Column(String(250))
@@ -55,6 +55,6 @@ class Vacancy(Base):
 class ApplicantsVacancy(Base):
     """ The Applicants_Vacancy bridge model class """
     __tablename__ = 'applicants_vacancy'
-    id = Column(Integer, primary_key=True)
+    id = Column(Integer, primary_key=True, autoincrement=True)
     applicant_id = Column(String(250))
     job_id = Column(String(250))

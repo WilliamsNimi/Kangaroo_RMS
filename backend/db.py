@@ -5,7 +5,10 @@ from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.orm.session import Session
+from sqlalchemy.exc import InvalidRequestError
+from sqlalchemy.orm.exc import NoResultFound
 from model import Base, Applicant, Recruiter, Vacancy, ApplicantsVacancy
+import uuid
 
 
 class DB:
@@ -29,10 +32,21 @@ class DB:
             self.__session = DBSession()
         return self.__session
 
-    def add_applicant(self) -> Applicant:
+    def add_applicant(self, f_name, l_name, email) -> Applicant:
         """ This method adds an applicant to the db
         Return: Returns the new applicant object
         """
+        try:
+            applicant_id = uuid.uuid4()
+            applicant = Applicant(first_name = f_name, last_name = l_name, email = email, applicant_id = str(applicant_id))
+            self._session.add(applicant)
+            self._session.commit()
+            return applicant
+        except (InvalidRequestError, NoResultFound) as err:
+            self._session.rollback()
+            print(err)
+            return None
+
     def add_recruiter(self) -> Recruiter:
         """ This method adds a recruiter to the db
         Return: Returns the new recruiter object
@@ -47,6 +61,19 @@ class DB:
         @query_str: the query to search for
         Return: Returns the first row wher the applicant is found
         """
+        applicants = self._session.query(Applicant)
+        if not applicants:
+            raise NoResultFound
+        if not kwargs:
+            raise InvalidRequestError
+        for key in kwargs.keys():
+            if not hasattr(Applicant, key):
+                raise InvalidRequestError
+        applicant_found = self._session.query(Applicant).filter_by(**kwargs).first()
+        if not applicant_found:
+            raise NoResultFound
+        return applicant_found
+
     def find_recruiter_by(self, **kwargs) -> Recruiter:
         """ A method to search the db
         @query_str: the query to search for
