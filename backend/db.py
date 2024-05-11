@@ -51,10 +51,25 @@ class DB:
         """ This method adds a recruiter to the db
         Return: Returns the new recruiter object
         """
-    def add_vacancy(self) -> Vacancy:
+    def add_vacancy(self, j_title, dept, unit, l_manager, no_open_pos,
+    date_of_req, bp, location, jd_summary) -> Vacancy:
         """ This method adds a Vacancy to the db
         Return: Returns the new vacancy object
         """
+        try:
+            job_id = uuid.uuid4()
+
+            vacancy = Vacancy(job_title = j_title, department = dept, unit = unit, line_manager = l_manager, 
+            job_id = str(job_id), number_of_open_positions = no_open_pos, date_of_requisition = date_of_req,
+            business_partner = bp, location = location, job_description_summary = jd_summary)
+
+            self._session.add(vacancy)
+            self._session.commit()
+            return vacancy
+        except (InvalidRequestError, NoResultFound) as err:
+            self._session.rollback()
+            print(err)
+            return None
 
     def find_applicant_by(self, **kwargs) -> Applicant:
         """ A method to search the db
@@ -84,6 +99,18 @@ class DB:
         @query_str: the query to search for
         Return: Returns the first row where the vacancy is found
         """
+        vacancies = self._session.query(Vacancy)
+        if not vacancies:
+            raise NoResultFound
+        if not kwargs:
+            raise InvalidRequestError
+        for key in kwargs.keys():
+            if not hasattr(Vacancy, key):
+                raise InvalidRequestError
+        vacancy_found = self._session.query(Vacancy).filter_by(**kwargs).first()
+        if not vacancy_found:
+            raise NoResultFound
+        return vacancy_found
 
     def update_applicant(self, applicant_id: int, **kwargs) -> None:
         """ This method updates applicants table based on id
