@@ -7,8 +7,8 @@ from flask import render_template
 from backend_api.v1.views import kangaroo
 
 
-@kangaroo.route('/jobs/requisition_id', methods=['GET'], strict_slashes=False)
-def requisite_job():
+@kangaroo.route('/jobs/requisition-id', methods=['GET'], strict_slashes=False)
+def create_job():
     """
     Returns template to create job as required
     """
@@ -17,8 +17,8 @@ def requisite_job():
     return render_template('requisite_job.html', job_id=job_id)
 
 
-@kangaroo.route('/jobs/<requisition_id>', methods=['PUT'], strict_slashes=False)
-def requisite_job(requisition_id):
+@kangaroo.route('/jobs/<requisition-id>', methods=['PUT'], strict_slashes=False)
+def post_job(requisition_id):
     """
     Creates job to be posted if id exists
     """
@@ -39,11 +39,11 @@ def requisite_job(requisition_id):
     job_created = create_job(job_details) # Returns True if Successful and False Otherwise. It takes a dictionary with neccessary details
                                           # and creates a job to be posted, checks if selected as private and executes accordingly
     if job_created:
-        return jsonify({'Succesful': True}), 201
-    return jsonify({'Succesful': False}), 500
+        return jsonify({'Successful': True}), 201
+    return jsonify({'Successful': False}), 500
 
 
-@kangaroo.route('/jobs/<job_id>', methods=['DELETE'], strict_slashes=False)
+@kangaroo.route('/jobs/<job-id>', methods=['DELETE'], strict_slashes=False)
 def delete_job(job_id):
     """
     Delete Job from job listings
