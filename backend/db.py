@@ -117,6 +117,15 @@ class DB:
         @applicant_id: user Id to be found
         Return: Returns none
         """
+        applicant = self.find_applicant_by(applicant_id=applicant_id)
+        for key, value in kwargs.items():
+            if not hasattr(Applicant, key):
+                raise ValueError
+            else:
+                setattr(applicant, key, value)
+        self._session.commit()
+        return None
+
     def update_recruiter(self, recruiter_id: int, **kwargs) -> None:
         """ This method updates recruiters table based on id
         @recruiter_id: recruiter Id to be found
@@ -127,3 +136,11 @@ class DB:
         @job_id: job Id to be found
         Return: Returns none
         """
+        vacancy = self.find_vacancy_by(job_id=job_id)
+        for key, value in kwargs.items():
+            if not hasattr(Vacancy, key):
+                raise ValueError
+            else:
+                setattr(vacancy, key, value)
+        self._session.commit()
+        return None
