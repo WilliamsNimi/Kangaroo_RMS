@@ -7,7 +7,7 @@ from sqlalchemy.orm import sessionmaker
 from sqlalchemy.orm.session import Session
 from sqlalchemy.exc import InvalidRequestError
 from sqlalchemy.orm.exc import NoResultFound
-from model import Base, Applicant, Recruiter, Vacancy, ApplicantsVacancy
+from model import Base, Applicant, Recruiter, Vacancy, ApplicantsVacancy, BusinessPartner
 import uuid
 
 
@@ -64,16 +64,15 @@ class DB:
             print(err)
             return None
     def add_vacancy(self, j_title, dept, unit, l_manager, no_open_pos,
-    date_of_req, bp, location, jd_summary) -> Vacancy:
+    date_of_req, bp, location, jd_summary, req_id) -> Vacancy:
         """ This method adds a Vacancy to the db
         Return: Returns the new vacancy object
         """
         try:
             job_id = uuid.uuid4()
-
             vacancy = Vacancy(job_title = j_title, department = dept, unit = unit, line_manager = l_manager, 
             job_id = str(job_id), number_of_open_positions = no_open_pos, date_of_requisition = date_of_req,
-            business_partner = bp, location = location, job_description_summary = jd_summary)
+            business_partner = bp, location = location, job_description_summary = jd_summary, requisition_id=req_id)
 
             self._session.add(vacancy)
             self._session.commit()
@@ -193,3 +192,51 @@ class DB:
             self._session.rollback()
             print(err)
             return None
+    
+    def add_business_partner(self, email, full_name):
+        """ Add a new business partner
+        @email: email of the business partner
+        @full_name: full name of the business partner
+        Return: the BusinessPartner object """
+        try:
+            business_partner = BusinessPartner(email = email, full_name = full_name)
+            self._session.add(business_partner)
+            self._session.commit()
+            self._session.refresh(business_partner)
+            return business_partner
+        except (InvalidRequestError, NoResultFound) as err:
+            self._session.rollback()
+            print(err)
+            return None
+
+    def find_business_partner_by(self, **kwargs) -> BusinessPartner:
+        """ A method to search the db
+        @query_str: the query to search for
+        Return: Returns the first row wher the applicant is found
+        """
+        bps = self._session.query(BusinessPartner)
+        if not bps:
+            raise NoResultFound
+        if not kwargs:
+            raise InvalidRequestError
+        for key in kwargs.keys():
+            if not hasattr(BusinessPartner, key):
+                raise InvalidRequestError
+        bp_found = self._session.query(BusinessPartner).filter_by(**kwargs).first()
+        if not applicant_found:
+            raise NoResultFound
+        return bp_found
+
+    def update_business_partner(self, email, **kwargs) -> None:
+        """ This method updates business partner table based on email
+        @email: email to be found
+        Return: Returns none
+        """
+        bp = self.find_business_partner_by(email=email)
+        for key, value in kwargs.items():
+            if not hasattr(BusinessPartner, key):
+                raise ValueError
+            else:
+                setattr(bp, key, value)
+        self._session.commit()
+        return None

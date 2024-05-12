@@ -51,6 +51,7 @@ class Vacancy(Base):
     job_description = Column(BLOB)
     job_description_summary = Column(String(250))
     recruiter_id = Column(String(250))
+    requisition_id = Column(String(250))
 
 class ApplicantsVacancy(Base):
     """ The Applicants_Vacancy bridge model class """
@@ -58,3 +59,10 @@ class ApplicantsVacancy(Base):
     id = Column(Integer, primary_key=True, autoincrement=True)
     applicant_id = Column(String(250))
     job_id = Column(String(250))
+
+class BusinessPartner(Base):
+    """ The Business Partner Model class """
+    __tablename__ = 'business_partners'
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    full_name = Column(String(250))
+    email = Column(String(250))
