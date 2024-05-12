@@ -6,7 +6,11 @@ from flask import request, abort, jsonify
 from flask import render_template
 from backend_api.v1.views import kangaroo
 
-
+"""
+1. post_job /jobs/<job-id> POST 'posting a job so it is visible to the applicants'
+2. delete_job /jobs/<job-id> 'delete a job so it is not visible to applicants'
+3. search_candidateDB /applicants/search?query="" 'search the applicant table for relevant data'
+"""
 @kangaroo.route('/jobs/requisition-id', methods=['GET'], strict_slashes=False)
 def create_job():
     """
