@@ -157,6 +157,15 @@ class DB:
         @recruiter_id: recruiter Id to be found
         Return: Returns none
         """
+        recruiter = self.find_recruiter_by(recruiter_id=recruiter_id)
+        for key, value in kwargs.items():
+            if not hasattr(Recruiter, key):
+                raise ValueError
+            else:
+                setattr(recruiter, key, value)
+        self._session.commit()
+        return None
+
     def update_vacancy(self, job_id, **kwargs) -> None:
         """ This method updates vacancy table based on id
         @job_id: job Id to be found
