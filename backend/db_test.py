@@ -1,6 +1,7 @@
 from db import DB
 import datetime
-
+from applicant import Applicant
+"""
 new_db = DB()
 
 new_db.add_applicant("Nimi", "Williams", "Williamson.nimi@gmail.com")
@@ -24,4 +25,15 @@ new_db.add_recruiter("nimi.williams@sterling.ng", "Nimi Williams")
 recruiter = new_db.find_recruiter_by(email="nimi.williams@sterling.ng")
 print(recruiter.recruiter_id)
 
-new_db.add_applications(applicant.applicant_id, vacancy.job_id)
+new_db.add_applications(applicant.applicant_id, vacancy.job_id)"""
+
+
+applicants = Applicant()
+db = DB()
+
+new_applicant = applicants.create_applicant("Nimi", "williams", "williamson.nimi@gmail.com")
+print(new_applicant.first_name)
+#db.update_applicant(applicant.applicant_id, first_name="Nimi", last_name="Murray")
+print(new_applicant.applicant_id)
+applicants.update_profile(new_applicant.applicant_id, first_name="Murray")
+print(new_applicant.first_name)

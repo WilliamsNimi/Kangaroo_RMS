@@ -41,6 +41,7 @@ class DB:
             applicant = Applicant(first_name = f_name, last_name = l_name, email = email, applicant_id = str(applicant_id))
             self._session.add(applicant)
             self._session.commit()
+            self._session.refresh(applicant)
             return applicant
         except (InvalidRequestError, NoResultFound) as err:
             self._session.rollback()
@@ -56,6 +57,7 @@ class DB:
             recruiter = Recruiter(full_name = full_name, email = email, recruiter_id = str(recruiter_id))
             self._session.add(recruiter)
             self._session.commit()
+            self._session.refresh(recruiter)
             return recruiter
         except (InvalidRequestError, NoResultFound) as err:
             self._session.rollback()
@@ -75,6 +77,7 @@ class DB:
 
             self._session.add(vacancy)
             self._session.commit()
+            self._session.refresh(vacancy)
             return vacancy
         except (InvalidRequestError, NoResultFound) as err:
             self._session.rollback()
@@ -135,7 +138,7 @@ class DB:
             raise NoResultFound
         return vacancy_found
 
-    def update_applicant(self, applicant_id: int, **kwargs) -> None:
+    def update_applicant(self, applicant_id, **kwargs) -> None:
         """ This method updates applicants table based on id
         @applicant_id: user Id to be found
         Return: Returns none
@@ -149,12 +152,12 @@ class DB:
         self._session.commit()
         return None
 
-    def update_recruiter(self, recruiter_id: int, **kwargs) -> None:
+    def update_recruiter(self, recruiter_id, **kwargs) -> None:
         """ This method updates recruiters table based on id
         @recruiter_id: recruiter Id to be found
         Return: Returns none
         """
-    def update_vacancy(self, job_id: int, **kwargs) -> None:
+    def update_vacancy(self, job_id, **kwargs) -> None:
         """ This method updates vacancy table based on id
         @job_id: job Id to be found
         Return: Returns none
