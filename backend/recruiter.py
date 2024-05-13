@@ -66,12 +66,12 @@ class Recruiter:
             return False
         try:
             applicants_found = self._db.find_applicants_by(**kwargs)
-            applicants_list = []
-            if applicants_found:
-                for applicant in applicants_found:
-                    applicants_list.append(applicant.__dict__)
-                return applicants_list
-            return None
+            applicants_list = [applicant.__dict__ for applicant in applicants_found if applicants_found]
+            # if applicants_found:
+            #     for applicant in applicants_found:
+            #         applicants_list.append(applicant.__dict__)
+            #     return applicants_list
+            return applicants_list if len(applicants_list) else None
         except Exception:
             return None
         
