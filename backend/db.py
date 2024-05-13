@@ -63,6 +63,7 @@ class DB:
             self._session.rollback()
             print(err)
             return None
+
     def add_vacancy(self, j_title, dept, unit, l_manager, no_open_pos,
     date_of_req, bp, location, jd_summary, req_id) -> Vacancy:
         """ This method adds a Vacancy to the db
@@ -240,3 +241,43 @@ class DB:
                 setattr(bp, key, value)
         self._session.commit()
         return None
+    
+    
+    #   ------------------------------ I(JBA) ADDED THE FUNCTIONS BELOW -----------------------------   #
+    
+    def find_applicants_by(self, **kwargs) -> Applicant: # Redundant method, probably a bool to be used to switch queries
+                                                         # of earlier method
+        """ A method to search the db
+        @query_str: the query to search for
+        Return: Returns the first row wher the applicant is found
+        """
+        applicants = self._session.query(Applicant)
+        if not applicants:
+            raise NoResultFound
+        if not kwargs:
+            raise InvalidRequestError
+        for key in kwargs.keys():
+            if not hasattr(Applicant, key):
+                raise InvalidRequestError
+        applicants_found = self._session.query(Applicant).filter_by(**kwargs).all()
+        if not applicants_found:
+            raise NoResultFound
+        return applicants_found
+
+
+    def delete_vacancy(self, job_id):
+        """Deletes a vacancy from db
+        
+        Keyword arguments:
+        @job_id: Job object with the provided ID
+        Return: Boolean
+        """
+        if not job_id:
+            return False
+        try:
+            vacancy_object = self.find_vacancy_by(job_id=job_id)
+            self._session.delete(vacancy_object)
+            self._session.commit()
+            return True
+        except Exception:
+            return False

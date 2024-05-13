@@ -33,3 +33,47 @@ class Recruiter:
             return "Profile updated successfully"
         except Exception as err:
             return err
+        
+    
+    # --------------------- I(JBA) ADDED THE METHODS BELOW --------------------------- #
+    
+    # def find_vacancy(self, job_id):
+    #     """Attempts finding vacancy from the db
+        
+    #     Keyword arguments:
+    #     @job_id: Identifies a specific vacancy object
+    #     Return: Boolean
+    #     """
+    #     try:
+    #        self._db.find_vacancy_by(job_id=job_id)
+    #        return True
+    #     except Exception:
+    #         return False
+    
+    def delete_job(self, job_id):
+        """
+        Deletes job from the db if it exists
+        @job_id: ID of job to be deleted
+        Returns: Boolean
+        """
+        return self._db.delete_vacancy(job_id=job_id)
+    
+    def boolean_search(self, **kwargs):
+        """Searches for applicants with mathing attributes
+        Return: applicant objects matching the provided attributes
+        """
+        if not kwargs:
+            return False
+        try:
+            applicants_found = self._db.find_applicants_by(**kwargs)
+            applicants_list = []
+            if applicants_found:
+                for applicant in applicants_found:
+                    applicants_list.append(applicant.__dict__)
+                return applicants_list
+            return None
+        except Exception:
+            return None
+        
+        
+        

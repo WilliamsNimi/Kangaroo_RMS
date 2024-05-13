@@ -56,3 +56,11 @@ class BusinessPartner:
         new_vacancy = self._db.add_vacancy(job_title, department, unit, line_manager, number_of_open_positions,
         date_of_requisition, bp_name, location, job_description_summary, requisition_id)
         return new_vacancy
+    
+
+    #   ------------------------------ I(JBA) ADDED THE FUNCTIONS BELOW -----------------------------   #
+
+
+
+    
+    
