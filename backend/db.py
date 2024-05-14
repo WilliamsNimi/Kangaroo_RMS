@@ -248,18 +248,23 @@ class DB:
     def find_applicants_by(self, **kwargs) -> Applicant: # Redundant method, probably a bool to be used to switch queries
                                                          # of earlier method
         """ A method to search the db
-        @query_str: the query to search for
-        Return: Returns the first row wher the applicant is found
+        @kwargs: Key Value items to search for in the db
+        Return: Returns all records in the table with matching substring
         """
         applicants = self._session.query(Applicant)
         if not applicants:
             raise NoResultFound
         if not kwargs:
             raise InvalidRequestError
-        for key in kwargs.keys():
+
+        filters = []
+
+        for key, value in kwargs.items():
             if not hasattr(Applicant, key):
                 raise InvalidRequestError
-        applicants_found = self._session.query(Applicant).filter_by(**kwargs).all()
+            filters.append(getattr(Applicant, key).like(f"%{value}%"))
+
+        applicants_found = applicants.filter(*filters).all()
         if not applicants_found:
             raise NoResultFound
         return applicants_found
