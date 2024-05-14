@@ -47,3 +47,12 @@ class Applicant:
             return "Profile updated successfully"
         except Exception as err:
             return err
+
+    def apply(self, applicant_id, job_id):
+        """ This function logs every application in the applicants_vacancy table
+        """
+        try:
+            application = self._db.add_applications(applicant_id, job_id)
+            print("You have successfuly applied")
+        except (InvalidRequestError, NoResultFound) as err:
+            print("Application unsuccessful)")
