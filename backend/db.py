@@ -224,7 +224,7 @@ class DB:
             if not hasattr(BusinessPartner, key):
                 raise InvalidRequestError
         bp_found = self._session.query(BusinessPartner).filter_by(**kwargs).first()
-        if not applicant_found:
+        if not bp_found:
             raise NoResultFound
         return bp_found
 
