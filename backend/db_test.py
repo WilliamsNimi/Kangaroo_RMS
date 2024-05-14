@@ -20,7 +20,7 @@ new_req = bp.make_requisition("Technical Recruiter", "Talent Acquisition", "Recr
 jd_summary = " This job involves understanding recruitment requirments and doing the needful in bringing in the best talent"
 date = datetime.datetime.now()
 vacancy = new_db.find_vacancy_by(job_title = "Technical Recruiter")
-applicants.apply(new_applicant.applicant_id, vacancy.job_id)
+applicants.apply(applicants.applicant_id, vacancy.job_id)
 
 """
 new_db.update_applicant(applicant.applicant_id, first_name="Murray")

@@ -33,7 +33,10 @@ class Applicant:
         try:
             self._db.find_applicant_by(email=email)
         except Exception:
-            return self._db.add_applicant(f_name, l_name, email)
+            applicant = self._db.add_applicant(f_name, l_name, email)
+            self.applicant_id = applicant.applicant_id
+            self.email = applicant.email
+            return applicant
         raise ValueError("Applicant with email {} already exists".format(email))
 
     def update_profile(self, applicant_id, **kwargs):
