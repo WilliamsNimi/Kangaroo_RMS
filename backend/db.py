@@ -187,6 +187,7 @@ class DB:
             application = ApplicantsVacancy(applicant_id = applicant_id, job_id=job_id)
             self._session.add(application)
             self._session.commit()
+            self._session.refresh(application)
             print("You have a new application")
             return application
         except (InvalidRequestError, NoResultFound) as err:

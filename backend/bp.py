@@ -7,36 +7,33 @@ import datetime
 
 class BusinessPartner:
     """ The Business partner Class """
-    def __init__(self):
-        self._db = DB()
-
-    def create_business_partner(self, email, full_name):
+    def create_business_partner(self, dbObject, email, full_name):
         """ Adds a new business partner to the db
         @email: the email of the business partner to be added
         @full_name: the full name of the business partner to be added
         Return: Returns the Business Partner Model object"""
         try:
-            self._db.find_business_partner_by(email=email)
+            dbObject.find_business_partner_by(email=email)
         except Exception:
             self.full_name = full_name
-            return self._db.add_business_partner(email, full_name)
+            return dbObject.add_business_partner(email, full_name)
         raise ValueError("BP with email {} already exists".format(email))
 
-    def update_profile(self, email, **kwargs):
+    def update_profile(self, dbObject, email, **kwargs):
         """ Updates the profile of the Business Partner
         @email: the email of the bp to be updated
         @kwargs: Key value list for updates
         Return: Returns nothing
         """
         try:
-            bp = self._db.find_business_partner_by(email=email)
-            self._db.update_business_partner(bp.email, **kwargs)
+            bp = dbObject.find_business_partner_by(email=email)
+            dbObject.update_business_partner(bp.email, **kwargs)
             return "Profile updated successfully"
         except Exception as err:
             return err
 
 
-    def make_requisition(self, job_title, department, unit, line_manager,
+    def make_requisition(self, dbObject, job_title, department, unit, line_manager,
     number_of_open_positions, location, job_description_summary):
         """ creates a requisition for a vacancy
         @job_title: the job role requisition is made for
@@ -53,7 +50,7 @@ class BusinessPartner:
         date_of_requisition = datetime.datetime.now()
         bp_name = self.full_name
 
-        new_vacancy = self._db.add_vacancy(job_title, department, unit, line_manager, number_of_open_positions,
+        new_vacancy = dbObject.add_vacancy(job_title, department, unit, line_manager, number_of_open_positions,
         date_of_requisition, bp_name, location, job_description_summary, requisition_id)
         return new_vacancy
     

@@ -52,6 +52,8 @@ class Vacancy(Base):
     job_description_summary = Column(String(250))
     recruiter_id = Column(String(250))
     requisition_id = Column(String(250))
+    approval_status = Column(String(250))
+    publish_status = Column(String(250))
 
 class ApplicantsVacancy(Base):
     """ The Applicants_Vacancy bridge model class """
