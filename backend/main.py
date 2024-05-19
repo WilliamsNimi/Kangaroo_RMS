@@ -33,4 +33,9 @@ print(new_vacancy.approval_status)
 recruiter.update_vacancy(new_db, new_vacancy.job_id, approval_status="Approved")
 print(new_vacancy.approval_status)
 
+print(new_db.show_all_vacancies())
+print(new_db.show_all_bps())
+print(new_db.show_all_recruiters())
+print(new_db.show_all_applicants())
+
 

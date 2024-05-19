@@ -287,3 +287,35 @@ class DB:
             return True
         except Exception:
             return False
+
+    def show_all_vacancies(self):
+        """Displays all the vacancies in the vacancy table"""
+        vacancy_list = []
+        vacancies = self._session.query(Vacancy).all()
+        for vacancy in vacancies:
+            vacancy_list.append(vacancy.job_id)
+        return vacancy_list
+
+    def show_all_recruiters(self):
+        """Displays all the vacancies in the vacancy table"""
+        recruiter_list = []
+        recruiters = self._session.query(Recruiter).all()
+        for recruiter in recruiters:
+            recruiter_list.append(recruiter.recruiter_id)
+        return recruiter_list
+
+    def show_all_bps(self):
+        """Displays all the vacancies in the vacancy table"""
+        bp_list = []
+        bps = self._session.query(BusinessPartner).all()
+        for bp in bps:
+            bp_list.append(bp.email)
+        return bp_list
+
+    def show_all_applicants(self):
+        """Displays all the vacancies in the vacancy table"""
+        applicant_list = []
+        applicants = self._session.query(Applicant).all()
+        for applicant in applicants:
+            applicant_list.append((applicant.first_name, applicant.email))
+        return applicant_list
