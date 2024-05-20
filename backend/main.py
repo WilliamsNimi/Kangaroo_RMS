@@ -20,9 +20,9 @@ from backend_core import bp
 
 
 #Create a new Recruiter, Business Partner and Applicant
-new_recruiter = recruiter.create_recruiter(new_db, "Nimi.williams@sterling.ng", "Nimi Williams")
-new_bp = bp.create_business_partner(new_db, "Joshua.agbeke@sterling.ng", "Joshua Agbeke")
-new_applicant = applicant.create_applicant(new_db, "John", "Farnam", "JohnFarnam@sterling.ng")
+new_recruiter = recruiter.create_recruiter("Nimi.williams@sterling.ng", "Nimi Williams")
+new_bp = bp.create_business_partner("Joshua.agbeke@sterling.ng", "Joshua Agbeke")
+new_applicant = applicant.create_applicant("John", "Farnam", "JohnFarnam@sterling.ng")
 
 
 #new_bp makes a requisition
@@ -33,10 +33,26 @@ line_manager = "Awosika Afolayan"
 number_of_open_positions = 2
 location = "Lagos"
 job_description_summary = "Lorem ipsom ipsom dolor sit amet"
+<<<<<<< HEAD
 new_vacancy = bp.make_requisition(new_db, job_title, department, unit, line_manager, number_of_open_positions, location, job_description_summary)
+||||||| f6bb5f3
+new_vacancy = bp.make_requisition(new_db, job_title, department, unit, line_manager, number_of_open_positions, location, job_description_summary)
+print(new_vacancy.approval_status)
+=======
+new_vacancy = bp.make_requisition(job_title, department, unit, line_manager, number_of_open_positions, location, job_description_summary)
+print(new_vacancy.approval_status)
+>>>>>>> origin/api_dev
 
 #Recruiter approves the new vacancy by changing the status to Approved
+<<<<<<< HEAD
 recruiter.update_vacancy(new_db, new_vacancy.job_id, approval_status="Approved")
+||||||| f6bb5f3
+recruiter.update_vacancy(new_db, new_vacancy.job_id, approval_status="Approved")
+print(new_vacancy.approval_status)
+=======
+recruiter.update_vacancy(new_vacancy.job_id, approval_status="Approved")
+print(new_vacancy.approval_status)
+>>>>>>> origin/api_dev
 
 #Applicant Applies for a job
 applicant.apply(new_db, new_applicant.applicant_id, new_vacancy.job_id)

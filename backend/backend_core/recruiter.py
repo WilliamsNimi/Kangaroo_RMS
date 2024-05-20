@@ -1,10 +1,9 @@
 """ This is the Recruiter controller class """
-from backend_core import db
+import backend_core
 
 class Recruiter:
     """ The Controller class """
     def __init__(self):
-        from backend_core import db
         """ Constructor initialization """
         self.email = ""
         self.full_name = ""
@@ -16,9 +15,9 @@ class Recruiter:
         @email: email address of the recruiter
         @full_name: full name of the recruiter"""
         try:
-            db.find_recruiter_by(email=email)
+            backend_core.db.find_recruiter_by(email=email)
         except Exception:
-            return db.add_recruiter(email, full_name)
+            return backend_core.db.add_recruiter(email, full_name)
         raise ValueError("Recruiter with email {} already exists".format(email))
 
     def update_profile(self, recruiter_id, **kwargs):
@@ -27,8 +26,8 @@ class Recruiter:
         @kwargs: key value arguments to be updated
         Return: Returns nothing"""
         try:
-            recruiter = db.find_recruiter_by(recruiter_id=recruiter_id)
-            db.update_recruiter(recruiter_id, **kwargs)
+            recruiter = backend_core.db.find_recruiter_by(recruiter_id=recruiter_id)
+            backend_core.db.update_recruiter(recruiter_id, **kwargs)
             return "Profile updated successfully"
         except Exception as err:
             return err
@@ -39,8 +38,8 @@ class Recruiter:
         @Return: Returns update status
         """
         try:
-            vacancy = db.find_vacancy_by(job_id=job_id)
-            db.update_vacancy(vacancy.job_id, **kwargs)
+            vacancy = backend_core.db.find_vacancy_by(job_id=job_id)
+            backend_core.db.update_vacancy(vacancy.job_id, **kwargs)
             return "Vacancy updated successfully"
         except Exception as err:
             return err
@@ -67,18 +66,41 @@ class Recruiter:
         @job_id: ID of job to be deleted
         Returns: Boolean
         """
-        return db.delete_vacancy(job_id=job_id)
+        return backend_core.db.delete_vacancy(job_id=job_id)
     
     # ------------ MAY 20 Changes Below ------------ #
     
-    def find_recruiter(recruiter_id):
+    def to_dict(self):
+        """Convert instance into dict format"""
+        dictionary = {}
+        dictionary.update(self.__dict__)
+        dictionary.update({'__class__':
+                          (str(type(self)).split('.')[-1]).split('\'')[0]})
+        if "_sa_instance_state" in dictionary.keys():
+            del dictionary["_sa_instance_state"]
+        return dictionary
+    
+    def find_recruiter(self, recruiter_id):
         """
         Find a recruiter obj based on recruiter_id
         """
         if not recruiter_id:
             return False
         try:
-            recruiterObj = db.find_applicant_by(recruiter_id=recruiter_id)
+            backend_core.db.find_recruiter_by(recruiter_id=recruiter_id)
+            return True
+        except Exception:
+            return False
+    
+    def delete_recruiter(self, recruiter_id):
+        """
+        Deletes a recruiter obj from the db
+        """
+        if not recruiter_id:
+            return False
+        try:
+            backend_core.db.find_recruiter_by(recruiter_id=recruiter_id)
+            backend_core.db.delete_recruiter(recruiter_id)
             return True
         except Exception:
             return False

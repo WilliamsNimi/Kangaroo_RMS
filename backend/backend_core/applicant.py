@@ -1,5 +1,5 @@
 """ This is the Applicant controller class """
-from backend_core import db
+import backend_core
 from sqlalchemy.exc import InvalidRequestError, NoResultFound
 
 
@@ -31,9 +31,9 @@ class Applicant:
         Return: Returns applicant
         """
         try:
-            db.find_applicant_by(email=email)
+            backend_core.db.find_applicant_by(email=email)
         except Exception:
-            applicant = db.add_applicant(f_name, l_name, email)
+            applicant = backend_core.db.add_applicant(f_name, l_name, email)
             self.applicant_id = applicant.applicant_id
             self.email = applicant.email
             return applicant
@@ -45,8 +45,8 @@ class Applicant:
         Return: Returns a string message
         """
         try:
-            applicant = db.find_applicant_by(applicant_id=applicant_id)
-            db.update_applicant(applicant.applicant_id, **kwargs)
+            applicant = backend_core.db.find_applicant_by(applicant_id=applicant_id)
+            backend_core.db.update_applicant(applicant.applicant_id, **kwargs)
             return "Profile updated successfully"
         except Exception as err:
             return err
@@ -55,7 +55,19 @@ class Applicant:
         """ This function logs every application in the applicants_vacancy table
         """
         try:
-            application = db.add_applications(applicant_id, job_id)
+            application = backend_core.db.add_applications(applicant_id, job_id)
             print("You have successfuly applied")
         except (InvalidRequestError, NoResultFound) as err:
             print("Application unsuccessful)")
+    
+    
+    # -------------- May 20 Changes Below ------------------ #
+    def to_dict(self):
+        """Convert instance into dict format"""
+        dictionary = {}
+        dictionary.update(self.__dict__)
+        dictionary.update({'__class__':
+                          (str(type(self)).split('.')[-1]).split('\'')[0]})
+        if "_sa_instance_state" in dictionary.keys():
+            del dictionary["_sa_instance_state"]
+        return dictionary
