@@ -105,5 +105,8 @@ class Recruiter:
         except Exception:
             return False
         
-        
+    def recruiter_vacancies(self, recruiter_id):
+        """
+        Retrieves all the vacancies associated with a recruiter
+        """
         
