@@ -1,5 +1,5 @@
 """ The business partner module """
-from backend_core import db
+import backend_core
 from backend_core.model import Base, Vacancy
 import uuid
 import datetime
@@ -13,10 +13,10 @@ class BusinessPartner:
         @full_name: the full name of the business partner to be added
         Return: Returns the Business Partner Model object"""
         try:
-            db.find_business_partner_by(email=email)
+            backend_core.db.find_business_partner_by(email=email)
         except Exception:
             self.full_name = full_name
-            return db.add_business_partner(email, full_name)
+            return backend_core.db.add_business_partner(email, full_name)
         raise ValueError("BP with email {} already exists".format(email))
 
     def update_profile(self, email, **kwargs):
@@ -26,8 +26,8 @@ class BusinessPartner:
         Return: Returns nothing
         """
         try:
-            bp = db.find_business_partner_by(email=email)
-            db.update_business_partner(bp.email, **kwargs)
+            bp = backend_core.db.find_business_partner_by(email=email)
+            backend_core.db.update_business_partner(bp.email, **kwargs)
             return "Profile updated successfully"
         except Exception as err:
             return err
@@ -50,13 +50,22 @@ class BusinessPartner:
         date_of_requisition = datetime.datetime.now()
         bp_name = self.full_name
 
-        new_vacancy = db.add_vacancy(job_title, department, unit, line_manager, number_of_open_positions,
+        new_vacancy = backend_core.db.add_vacancy(job_title, department, unit, line_manager, number_of_open_positions,
         date_of_requisition, bp_name, location, job_description_summary, requisition_id)
         return new_vacancy
     
 
-    #   ------------------------------ I(JBA) ADDED THE FUNCTIONS BELOW -----------------------------   #
+    #   ------------------------------ May 20 Changes Below ----------------------   #
 
+    def to_dict(self):
+        """Convert instance into dict format"""
+        dictionary = {}
+        dictionary.update(self.__dict__)
+        dictionary.update({'__class__':
+                          (str(type(self)).split('.')[-1]).split('\'')[0]})
+        if "_sa_instance_state" in dictionary.keys():
+            del dictionary["_sa_instance_state"]
+        return dictionary
 
 
     

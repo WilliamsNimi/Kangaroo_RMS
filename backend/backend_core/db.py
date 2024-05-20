@@ -319,3 +319,55 @@ class DB:
         for applicant in applicants:
             applicant_list.append((applicant.first_name, applicant.email))
         return applicant_list
+    
+    # ------------------- MAY 20 Changes Below ------------------ #
+
+    def delete_recruiter(self, recruiter_id):
+        """ This method Deletes a recruiter from the db
+            Returns Boolean
+        """
+        try:
+            recruiterObj = self.find_recruiter_by(recruiter_id=recruiter_id)
+            self._session.delete(recruiterObj)
+            self._session.commit()
+            return True
+        except (InvalidRequestError, NoResultFound) as err:
+            self._session.rollback()
+            print(err)
+            return False
+    
+    def find_recruiter_vacancies_by(self, recruiter_id):
+        """ A method to retrieve all vacancies of recruiter - the approved
+            and unapproved
+        recruiter_id: the query to search for
+        Return: List of vacancies of the recruiter
+        """
+        if not recruiter_id:
+            raise InvalidRequestError
+        vacancies = self._session.query(Vacancy)
+        if not vacancies:
+            raise NoResultFound
+        if not hasattr(Vacancy, recruiter_id):
+            raise InvalidRequestError
+
+        vacancies_found = self._session.query(Vacancy).filter_by(recruiter_id=recruiter_id).all()
+        if not vacancies_found:
+            raise NoResultFound
+        vacancy_list = []
+        
+        for vacancy in vacancies_found:
+            vacancy_list.append(self.to_dict(vacancy))
+
+        return vacancy_list
+    
+    def to_dict(self, object):
+        """Convert instance into dict format"""
+        dictionary = {}
+        dictionary.update(object.__dict__)
+        dictionary.update({'__class__':
+                          (str(type(object)).split('.')[-1]).split('\'')[0]})
+        dictionary['date_of_requisition'] = object.date_of_requisition.isoformat()
+
+        if "_sa_instance_state" in dictionary.keys():
+            del dictionary["_sa_instance_state"]
+        return dictionary
