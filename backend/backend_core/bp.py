@@ -1,39 +1,39 @@
 """ The business partner module """
-from db import DB
-from model import Base, Vacancy
+from backend_core import db
+from backend_core.model import Base, Vacancy
 import uuid
 import datetime
 
 
 class BusinessPartner:
     """ The Business partner Class """
-    def create_business_partner(self, dbObject, email, full_name):
+    def create_business_partner(self, email, full_name):
         """ Adds a new business partner to the db
         @email: the email of the business partner to be added
         @full_name: the full name of the business partner to be added
         Return: Returns the Business Partner Model object"""
         try:
-            dbObject.find_business_partner_by(email=email)
+            db.find_business_partner_by(email=email)
         except Exception:
             self.full_name = full_name
-            return dbObject.add_business_partner(email, full_name)
+            return db.add_business_partner(email, full_name)
         raise ValueError("BP with email {} already exists".format(email))
 
-    def update_profile(self, dbObject, email, **kwargs):
+    def update_profile(self, email, **kwargs):
         """ Updates the profile of the Business Partner
         @email: the email of the bp to be updated
         @kwargs: Key value list for updates
         Return: Returns nothing
         """
         try:
-            bp = dbObject.find_business_partner_by(email=email)
-            dbObject.update_business_partner(bp.email, **kwargs)
+            bp = db.find_business_partner_by(email=email)
+            db.update_business_partner(bp.email, **kwargs)
             return "Profile updated successfully"
         except Exception as err:
             return err
 
 
-    def make_requisition(self, dbObject, job_title, department, unit, line_manager,
+    def make_requisition(self, job_title, department, unit, line_manager,
     number_of_open_positions, location, job_description_summary):
         """ creates a requisition for a vacancy
         @job_title: the job role requisition is made for
@@ -50,7 +50,7 @@ class BusinessPartner:
         date_of_requisition = datetime.datetime.now()
         bp_name = self.full_name
 
-        new_vacancy = dbObject.add_vacancy(job_title, department, unit, line_manager, number_of_open_positions,
+        new_vacancy = db.add_vacancy(job_title, department, unit, line_manager, number_of_open_positions,
         date_of_requisition, bp_name, location, job_description_summary, requisition_id)
         return new_vacancy
     

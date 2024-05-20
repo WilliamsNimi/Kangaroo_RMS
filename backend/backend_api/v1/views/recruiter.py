@@ -38,5 +38,6 @@ def delete_vacancy(job_id):
     return jsonify({'success': True}), 204
         
 
-
+@kangaroo.route('/recruiter/applicants/<recruiter-id>', methods=['GET'], strict_slashes=False)
+def recruiter_applicants
 

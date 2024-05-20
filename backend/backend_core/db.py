@@ -7,7 +7,7 @@ from sqlalchemy.orm import sessionmaker
 from sqlalchemy.orm.session import Session
 from sqlalchemy.exc import InvalidRequestError
 from sqlalchemy.orm.exc import NoResultFound
-from model import Base, Applicant, Recruiter, Vacancy, ApplicantsVacancy, BusinessPartner
+from backend_core.model import Base, Applicant, Recruiter, Vacancy, ApplicantsVacancy, BusinessPartner
 import uuid
 
 
