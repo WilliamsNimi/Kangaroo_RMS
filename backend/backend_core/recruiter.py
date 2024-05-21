@@ -105,5 +105,15 @@ class Recruiter:
         except Exception:
             return False
         
+    def recruiter_vacancies(self, recruiter_id):
+        """
+        Retrieves all the vacancies associated with a recruiter
+        """
         
-        
+        if not recruiter_id:
+            return False
+        try:
+            vacancy_list = backend_core.db.find_recruiter_vacancies_by(recruiter_id)
+            return vacancy_list
+        except Exception:
+            return False

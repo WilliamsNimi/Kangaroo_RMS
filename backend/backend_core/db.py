@@ -347,17 +347,15 @@ class DB:
         vacancies = self._session.query(Vacancy)
         if not vacancies:
             raise NoResultFound
-        if not hasattr(Vacancy, recruiter_id):
+        if not hasattr(Vacancy, 'recruiter_id'):
             raise InvalidRequestError
-
         vacancies_found = self._session.query(Vacancy).filter_by(recruiter_id=recruiter_id).all()
         if not vacancies_found:
             raise NoResultFound
         vacancy_list = []
-        
+
         for vacancy in vacancies_found:
             vacancy_list.append(self.to_dict(vacancy))
-
         return vacancy_list
     
     def to_dict(self, object):

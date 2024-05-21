@@ -45,17 +45,47 @@ print(new_vacancy.approval_status)
 
 #Recruiter approves the new vacancy by changing the status to Approved
 <<<<<<< HEAD
+<<<<<<< HEAD
 recruiter.update_vacancy(new_db, new_vacancy.job_id, approval_status="Approved")
 ||||||| f6bb5f3
 recruiter.update_vacancy(new_db, new_vacancy.job_id, approval_status="Approved")
 print(new_vacancy.approval_status)
 =======
 recruiter.update_vacancy(new_vacancy.job_id, approval_status="Approved")
+||||||| ebb2d99
+recruiter.update_vacancy(new_vacancy.job_id, approval_status="Approved")
+=======
+recruiter.update_vacancy(new_vacancy.job_id, approval_status="Approved", recruiter_id='9d6f5fe6-5e17-476e-92de-d23906a88a18')
+>>>>>>> origin/api_dev
 print(new_vacancy.approval_status)
 >>>>>>> origin/api_dev
 
 #Applicant Applies for a job
 applicant.apply(new_db, new_applicant.applicant_id, new_vacancy.job_id)
 
+<<<<<<< HEAD
 
+||||||| ebb2d99
+print(new_db.show_all_vacancies())
+print(new_db.show_all_bps())
+print(new_db.show_all_recruiters())
+print(new_db.show_all_applicants())
+
+=======
+print(new_db.show_all_vacancies())
+print(new_db.show_all_bps())
+print(new_db.show_all_recruiters())
+print(new_db.show_all_applicants())
+print()
+print()
+print()
+# try:
+print(new_db.find_recruiter_vacancies_by('9d6f5fe6-5e17-476e-92de-d23906a88a18'))
+print('IT WORKED IN MISSISSIPII')
+# except Exception as e:
+#     print('No vacancy found')
+#     print()
+#     print()
+#     print(e)
+>>>>>>> origin/api_dev
 

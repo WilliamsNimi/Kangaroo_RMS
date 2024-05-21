@@ -40,7 +40,7 @@ def add_recruiter():
         abort(400)
     try:
         recruiterObj = recruiter.create_recruiter(email, full_name)
-        return jsonify({'recruiter': recruiterObj, 'success': True}), 201
+        return jsonify({'recruiter': recruiterObj.to_dict(), 'success': True}), 201
     except Exception:
         return jsonify({'success': False}), 409
 
@@ -65,4 +65,8 @@ def recruiter_vacancies(recruiter_id):
     """
     if not recruiter.find_recruiter(recruiter_id):
         abort(404)
-
+    vacancy_list = recruiter.recruiter_vacancies(recruiter_id)
+    
+    if vacancy_list:
+        return jsonify({'vacancies': vacancy_list, 'success': True})
+    return jsonify({'success': False}), 400
