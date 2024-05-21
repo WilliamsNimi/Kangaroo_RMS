@@ -47,9 +47,11 @@ class Applicant:
         try:
             applicant = backend_core.db.find_applicant_by(applicant_id=applicant_id)
             backend_core.db.update_applicant(applicant.applicant_id, **kwargs)
-            return "Profile updated successfully"
+            print("Profile updated successfully")
+            return True
         except Exception as err:
-            return err
+            print(err)
+            return False
 
     def apply(self, applicant_id, job_id):
         """ This function logs every application in the applicants_vacancy table
@@ -57,9 +59,11 @@ class Applicant:
         try:
             application = backend_core.db.add_applications(applicant_id, job_id)
             print("You have successfuly applied")
+            return True
         except (InvalidRequestError, NoResultFound) as err:
             print("Application unsuccessful)")
-    
+            return False
+
     
     # -------------- May 20 Changes Below ------------------ #
     def to_dict(self):

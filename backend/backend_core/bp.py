@@ -28,9 +28,11 @@ class BusinessPartner:
         try:
             bp = backend_core.db.find_business_partner_by(email=email)
             backend_core.db.update_business_partner(bp.email, **kwargs)
-            return "Profile updated successfully"
+            print("Profile updated successfully")
+            return True
         except Exception as err:
-            return err
+            print(err)
+            return False
 
 
     def make_requisition(self, job_title, department, unit, line_manager,
@@ -48,7 +50,7 @@ class BusinessPartner:
 
         requisition_id = str(uuid.uuid4())
         date_of_requisition = datetime.datetime.now()
-        bp_name = self.full_name
+        bp_name = self.full_name # self.full_name is not entirely defined since we're using global objects
 
         new_vacancy = backend_core.db.add_vacancy(job_title, department, unit, line_manager, number_of_open_positions,
         date_of_requisition, bp_name, location, job_description_summary, requisition_id)
