@@ -13,7 +13,7 @@ from backend_core import recruiter
 3. search_candidateDB /applicants/search?query="" 'search the applicant table for relevant data'
 """
 
-@kangaroo.route('/jobs/<job-id>', methods=['DELETE'], strict_slashes=False)
+@kangaroo.route('/jobs/<job_id>', methods=['DELETE'], strict_slashes=False)
 def delete_vacancy(job_id):
     """Delete Job from job listings
     
@@ -45,7 +45,7 @@ def add_recruiter():
         return jsonify({'success': False}), 409
 
 
-@kangaroo.route('/recruiter/delete/<recruiter-id>', methods=['POST'], strict_slashes=False)
+@kangaroo.route('/recruiter/delete/<recruiter_id>', methods=['POST'], strict_slashes=False)
 def delete_recruiter(recruiter_id):
     """
     Deletes recruiter from the db
@@ -58,7 +58,7 @@ def delete_recruiter(recruiter_id):
     return jsonify({'success': False}), 400
 
 
-@kangaroo.route('/recruiter/vacancies/<recruiter-id>', methods=['GET'], strict_slashes=False)
+@kangaroo.route('/recruiter/vacancies/<recruiter_id>', methods=['GET'], strict_slashes=False)
 def recruiter_vacancies(recruiter_id):
     """
     Retrieves all vacancies associated with the recruiter

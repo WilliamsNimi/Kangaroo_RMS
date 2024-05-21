@@ -9,7 +9,7 @@ from backend_core import bp
 
 
 @kangaroo.route('/bp/requisitions', methods=['GET'], strict_slashes=False)
-def create_requisition():
+def bp_create_requisition():
     """
     Returns template to create vacancy requisition
     """
@@ -17,7 +17,7 @@ def create_requisition():
 
 
 @kangaroo.route('/bp/requisitions', methods=['POST'], strict_slashes=False)
-def post_vacancy():
+def bp_post_vacancy():
     """
     Creates job to be posted if requisition-id exists
     """
@@ -46,7 +46,7 @@ def post_vacancy():
     return jsonify({'success': False}), 500
 
 @kangaroo.route('/bp/profile/update', methods=['POST'], strict_slashes=False)
-def update_profile():
+def bp_update_profile():
     """
     Updates profile of the business partner
     """
@@ -62,7 +62,7 @@ def update_profile():
     return jsonify({'success': False}), 500
 
 @kangaroo.route('/bp/profile/delete', methods=['DELETE'], strict_slashes=False)
-def delete_bp():
+def bp_delete():
     """
     Deletes BP object from the database
     """
