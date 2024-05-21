@@ -15,7 +15,7 @@ def create_applicant():
 
 
 @kangaroo.route('/applicant/new', methods=['POST'], strict_slashes=False)
-def create_applicant():
+def create_applicant_new():
     """
     Creates new applicant
     """
@@ -37,7 +37,7 @@ def create_applicant():
         return jsonify({'success': False}), 500
 
 @kangaroo.route('/applicant/apply', methods=['POST'], strict_slashes=False)
-def apply_to_job():
+def applicant_apply_to_job():
     """
     Applies an applicant to a job
     """
@@ -54,7 +54,7 @@ def apply_to_job():
     return jsonify({'success': False}), 500
 
 @kangaroo.route('/applicant/profile/update', methods=['POST'], strict_slashes=False)
-def update_profile():
+def applicant_update_profile():
     """
     Updates profile of applicant
     """
