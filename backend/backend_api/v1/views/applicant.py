@@ -30,11 +30,13 @@ def create_applicant_new():
         abort(500)
     try:
         applicantObj = applicant.create_applicant(f_name, l_name, email)
-        
         if applicantObj:
-            return jsonify({'applicant': applicantObj.to_dict(), 'success': True}), 201
-    except Exception:
-        return jsonify({'success': False}), 500
+            del applicantObj.__dict__["_sa_instance_state"]
+            applicantObj.__dict__['__class__'] = (str(type(applicantObj)).split('.')[-1]).split('\'')[0]
+            return jsonify({'applicant': applicantObj.__dict__, 'success': True}), 201
+    except Exception as err:
+        print(err)
+        return jsonify({'success': False, 'message': err}), 500
 
 @kangaroo.route('/applicant/apply', methods=['POST'], strict_slashes=False)
 def applicant_apply_to_job():
@@ -49,11 +51,15 @@ def applicant_apply_to_job():
     
     if not applicant_id or not job_id:
         abort(400)
-    if applicant.apply(applicant_id, job_id):
-        return jsonify({'success': True}), 201
-    return jsonify({'success': False}), 500
+    try:
+        if applicant.apply(applicant_id, job_id):
+            return jsonify({'success': True}), 201
+        return jsonify({'success': False}), 500
+    except Exception as error:
+        print(error)
+        return jsonify({'success': False}), 500
 
-@kangaroo.route('/applicant/profile/update', methods=['POST'], strict_slashes=False)
+@kangaroo.route('/applicant/profile/update', methods=['PUT'], strict_slashes=False)
 def applicant_update_profile():
     """
     Updates profile of applicant
@@ -67,7 +73,11 @@ def applicant_update_profile():
         abort(400)
     del update_details['applicant_id']
     
-    if applicant.update_profile(applicant_id, **update_details):
-        return jsonify({'success': True}), 204
-    return jsonify({'success': False}), 500
+    try:
+        if applicant.update_profile(applicant_id, **update_details):
+            return jsonify({'success': True})
+        return jsonify({'success': False}), 500
+    except Exception as error:
+        print(error)
+        return jsonify({'success': False}), 500
     

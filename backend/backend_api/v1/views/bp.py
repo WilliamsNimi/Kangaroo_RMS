@@ -15,6 +15,29 @@ def bp_create_requisition():
     """
     return render_template('new_requisition.html')
 
+@kangaroo.route('/bp/new', methods=['POST'], strict_slashes=False)
+def bp_creation():
+    """
+    Creates new business partner OBJ
+    """
+    if not request.get_json():
+        abort(400)
+    bp_details = request.get_json()
+    email = bp_details.get('email')
+    full_name = bp_details.get('full_name')
+    
+    if not email or not full_name:
+        abort(400)
+    try:
+        business_obj = bp.create_business_partner(email, full_name)
+        if business_obj:
+            del business_obj.__dict__["_sa_instance_state"]
+            business_obj.__dict__['__class__'] = (str(type(business_obj)).split('.')[-1]).split('\'')[0]
+            return jsonify({'success': True, 'vacancy': business_obj.__dict__}), 201
+        return jsonify({'success': False}), 500
+    except Exception:
+        return jsonify({'success': False, 'message': "BP with email {} already exists".format(email)}), 500
+
 
 @kangaroo.route('/bp/requisitions', methods=['POST'], strict_slashes=False)
 def bp_post_vacancy():
@@ -29,7 +52,6 @@ def bp_post_vacancy():
                 'location', 'job_description_summary', 'recruiter_id']
     if not all(vacancy_details.get(detail) for detail in vacancy_list):
         abort(400)
-
     job_title = vacancy_details.get('job_title')
     department = vacancy_details.get('department')
     unit = vacancy_details.get('unit')
@@ -39,13 +61,18 @@ def bp_post_vacancy():
     job_description_summary = vacancy_details.get('job_description_summary')
     recruiter_id = vacancy_details.get('recruiter_id') # Should we not be expecting a recruiter_id?
     
-    vacancy_created = bp.make_requisition(job_title, department, unit, line_manager,
+    try:
+        vacancy_created = bp.make_requisition(job_title, department, unit, line_manager,
                                           number_of_open_positions, location, job_description_summary) 
-    if vacancy_created:
-        return jsonify({'success': True, 'vacancy': vacancy_created.to_dict()}), 201
-    return jsonify({'success': False}), 500
+        if vacancy_created:
+            del vacancy_created.__dict__["_sa_instance_state"]
+            vacancy_created.__dict__['__class__'] = (str(type(vacancy_created)).split('.')[-1]).split('\'')[0]
+            return jsonify({'success': True, 'vacancy': vacancy_created.__dict__}), 201
+    except Exception as error:
+        print(error)
+        return jsonify({'success': False}), 500
 
-@kangaroo.route('/bp/profile/update', methods=['POST'], strict_slashes=False)
+@kangaroo.route('/bp/profile/update', methods=['PUT'], strict_slashes=False)
 def bp_update_profile():
     """
     Updates profile of the business partner
@@ -57,9 +84,14 @@ def bp_update_profile():
     
     if not email:
         abort(404)
-    if bp.update_profile(email, **update_details):
-        return jsonify({'success': True}), 204
-    return jsonify({'success': False}), 500
+    try:
+        del update_details['email']
+        if bp.update_profile(email, **update_details):
+            return jsonify({'success': True})
+        return jsonify({'success': False}), 500
+    except Exception as error:
+        print(error)
+        return jsonify({'success': False}), 500
 
 @kangaroo.route('/bp/profile/delete', methods=['DELETE'], strict_slashes=False)
 def bp_delete():
@@ -73,12 +105,16 @@ def bp_delete():
     # T.B.I === TO BE IMPLEMENTED
     if not email:
         abort(404)
-    if not bp.find_business_partner_by(email): # Check if bp exists - TBI
-        abort(404)
-    success = bp.delete_business_partner(email=email) # Delete business partner - TBI
+    try:
+        if not bp.find_business_partner(email): # Check if bp exists - TBI
+            abort(404)
+        success = bp.delete_business_partner(email=email) # Delete business partner - TBI
     
-    if success:
-        return jsonify({'success': True}), 204
-    return jsonify({'success': False}), 500 
+        if success:
+            return jsonify({'success': True})
+        return jsonify({'success': False}), 500 
+    except Exception as error:
+        print(error)
+        return jsonify({'success': False}), 500 
     
     

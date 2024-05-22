@@ -45,14 +45,6 @@ print(new_db.show_all_bps())
 print(new_db.show_all_recruiters())
 print(new_db.show_all_applicants())
 print()
-print()
-print()
-# try:
 print(new_db.find_recruiter_vacancies_by('9d6f5fe6-5e17-476e-92de-d23906a88a18'))
 print('IT WORKED IN MISSISSIPII')
-# except Exception as e:
-#     print('No vacancy found')
-#     print()
-#     print()
-#     print(e)
 

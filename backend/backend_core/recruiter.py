@@ -109,7 +109,6 @@ class Recruiter:
         """
         Retrieves all the vacancies associated with a recruiter
         """
-        
         if not recruiter_id:
             return False
         try:

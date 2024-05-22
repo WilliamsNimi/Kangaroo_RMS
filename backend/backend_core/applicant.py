@@ -49,8 +49,8 @@ class Applicant:
             backend_core.db.update_applicant(applicant.applicant_id, **kwargs)
             print("Profile updated successfully")
             return True
-        except Exception as err:
-            print(err)
+        except Exception as error:
+            print(type(error))
             return False
 
     def apply(self, applicant_id, job_id):
@@ -63,15 +63,3 @@ class Applicant:
         except (InvalidRequestError, NoResultFound) as err:
             print("Application unsuccessful)")
             return False
-
-    
-    # -------------- May 20 Changes Below ------------------ #
-    def to_dict(self):
-        """Convert instance into dict format"""
-        dictionary = {}
-        dictionary.update(self.__dict__)
-        dictionary.update({'__class__':
-                          (str(type(self)).split('.')[-1]).split('\'')[0]})
-        if "_sa_instance_state" in dictionary.keys():
-            del dictionary["_sa_instance_state"]
-        return dictionary
