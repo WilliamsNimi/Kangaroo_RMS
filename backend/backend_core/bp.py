@@ -15,7 +15,7 @@ class BusinessPartner:
         try:
             backend_core.db.find_business_partner_by(email=email)
         except Exception:
-            self.full_name = full_name
+            # self.full_name = full_name
             return backend_core.db.add_business_partner(email, full_name)
         raise ValueError("BP with email {} already exists".format(email))
 
@@ -50,24 +50,39 @@ class BusinessPartner:
 
         requisition_id = str(uuid.uuid4())
         date_of_requisition = datetime.datetime.now()
-        bp_name = self.full_name # self.full_name is not entirely defined since we're using global objects
+        bp_name = "Temporary Business Partner"
 
         new_vacancy = backend_core.db.add_vacancy(job_title, department, unit, line_manager, number_of_open_positions,
         date_of_requisition, bp_name, location, job_description_summary, requisition_id)
         return new_vacancy
     
-
-    #   ------------------------------ May 20 Changes Below ----------------------   #
-
-    def to_dict(self):
-        """Convert instance into dict format"""
-        dictionary = {}
-        dictionary.update(self.__dict__)
-        dictionary.update({'__class__':
-                          (str(type(self)).split('.')[-1]).split('\'')[0]})
-        if "_sa_instance_state" in dictionary.keys():
-            del dictionary["_sa_instance_state"]
-        return dictionary
+    def find_business_partner(self, email):
+        """
+        Uses method in db.py to check existence of business partner
+        """
+        if not email:
+            return False
+        try:
+            backend_core.db.find_business_partner_by(email=email)
+            return True
+        except Exception as error:
+            print(error)
+            return False
+    
+    def delete_business_partner(self, email):
+        """
+        Deletes business partner from the db
+        """
+        if not email:
+            return False
+        try:
+            if not self.find_business_partner(email=email):
+                return False
+            if backend_core.db.delete_business_partner(email=email):
+                return True
+            return False
+        except Exception:
+            return False
 
 
     

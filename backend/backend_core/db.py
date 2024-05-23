@@ -18,8 +18,9 @@ class DB:
     def __init__(self) -> None:
         """Initialize a new DB instance
         """
-        self._engine = create_engine("sqlite:///kangaroo.db")
-        Base.metadata.drop_all(self._engine)
+        # self._engine = create_engine("sqlite:///kangaroo.db")
+        self._engine = create_engine('mysql+mysqldb://root:Holybible@localhost/kangaroo')
+        # Base.metadata.drop_all(self._engine)
         Base.metadata.create_all(self._engine)
         self.__session = None
 
@@ -73,7 +74,7 @@ class DB:
             job_id = uuid.uuid4()
             vacancy = Vacancy(job_title = j_title, department = dept, unit = unit, line_manager = l_manager, 
             job_id = str(job_id), number_of_open_positions = no_open_pos, date_of_requisition = date_of_req,
-            business_partner = bp, location = location, job_description_summary = jd_summary, requisition_id=req_id)
+            business_partner = bp, location = location, job_description_summary = jd_summary, recruiter_id = 'a49abf74-4946-4078-b485-db083cc89c0b', requisition_id=req_id)
 
             self._session.add(vacancy)
             self._session.commit()

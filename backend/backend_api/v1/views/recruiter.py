@@ -7,24 +7,23 @@ from flask import render_template
 from backend_api.v1.views import kangaroo
 from backend_core import recruiter
 
-"""
-1. post_job /jobs/<job-id> POST 'posting a job so it is visible to the applicants'
-2. delete_job /jobs/<job-id> 'delete a job so it is not visible to applicants'
-3. search_candidateDB /applicants/search?query="" 'search the applicant table for relevant data'
-"""
 
-@kangaroo.route('/jobs/<job_id>', methods=['DELETE'], strict_slashes=False)
+@kangaroo.route('/recruiter/jobs/<job_id>', methods=['DELETE'], strict_slashes=False)
 def delete_vacancy(job_id):
     """Delete Job from job listings
     
     Keyword arguments:
     @job_id: Id of the Job object to be deleted
     """
-    if not recruiter.delete_job(job_id=job_id):
-        return jsonify({'success': False}), 404
-    return jsonify({'success': True}), 204
+    try:
+        if not recruiter.delete_job(job_id=job_id):
+            return jsonify({'success': False}), 404
+        return jsonify({'success': True}), 204
+    except Exception as error:
+        print(error)
+        return jsonify({'success': False}), 204
 
-# ----------- May 20 Changes below ----------- #
+
 @kangaroo.route('/recruiter/new', methods=['POST'], strict_slashes=False)
 def add_recruiter():
     """
@@ -40,12 +39,17 @@ def add_recruiter():
         abort(400)
     try:
         recruiterObj = recruiter.create_recruiter(email, full_name)
-        return jsonify({'recruiter': recruiterObj.to_dict(), 'success': True}), 201
-    except Exception:
+        
+        if recruiterObj:
+            del recruiterObj.__dict__["_sa_instance_state"]
+            recruiterObj.__dict__['__class__'] = (str(type(recruiterObj)).split('.')[-1]).split('\'')[0]
+        return jsonify({'recruiter': recruiterObj.__dict__, 'success': True}), 201
+    except Exception as err:
+        print(err)
         return jsonify({'success': False}), 409
 
 
-@kangaroo.route('/recruiter/delete/<recruiter_id>', methods=['POST'], strict_slashes=False)
+@kangaroo.route('/recruiter/delete/<recruiter_id>', methods=['DELETE'], strict_slashes=False)
 def delete_recruiter(recruiter_id):
     """
     Deletes recruiter from the db
@@ -65,8 +69,12 @@ def recruiter_vacancies(recruiter_id):
     """
     if not recruiter.find_recruiter(recruiter_id):
         abort(404)
-    vacancy_list = recruiter.recruiter_vacancies(recruiter_id)
+    try:
+        vacancy_list = recruiter.recruiter_vacancies(recruiter_id)
     
-    if vacancy_list:
-        return jsonify({'vacancies': vacancy_list, 'success': True})
-    return jsonify({'success': False}), 400
+        if vacancy_list:
+            return jsonify({'vacancies': vacancy_list, 'success': True})
+        return jsonify({'success': False}), 404
+    except Exception as error:
+        print(error)
+        return jsonify({'success': False}), 400
