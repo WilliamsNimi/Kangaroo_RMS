@@ -19,9 +19,9 @@ class DB:
     def __init__(self) -> None:
         """Initialize a new DB instance
         """
-        # self._engine = create_engine("sqlite:///kangaroo.db")
-        self._engine = create_engine('mysql+mysqldb://root:Holybible@localhost/kangaroo')
-        # Base.metadata.drop_all(self._engine)
+        self._engine = create_engine("sqlite:///kangaroo.db")
+        # self._engine = create_engine('mysql+mysqldb://root:password@localhost/kangaroo')
+        Base.metadata.drop_all(self._engine)
         Base.metadata.create_all(self._engine)
         self.__session = None
 
@@ -269,12 +269,8 @@ class DB:
             self._session.commit()
         except Exception:
             return None
-    
-    
-    #   ------------------------------ I(JBA) ADDED THE FUNCTIONS BELOW -----------------------------   #
-    
-    def find_applicants_by(self, **kwargs) -> Applicant: # Redundant method, probably a bool to be used to switch queries
-                                                         # of earlier method
+
+    def find_applicants_by(self, **kwargs) -> Applicant:
         """ A method to search the db
         @kwargs: Key Value items to search for in the db
         Return: Returns all records in the table with matching substring
@@ -346,8 +342,6 @@ class DB:
         for applicant in applicants:
             applicant_list.append((applicant.first_name, applicant.email))
         return applicant_list
-    
-    # ------------------- MAY 20 Changes Below ------------------ #
 
     def delete_recruiter(self, recruiter_id):
         """ This method Deletes a recruiter from the db
