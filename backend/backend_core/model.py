@@ -23,6 +23,7 @@ class Applicant(Base):
     resume = Column(BLOB)
     applicant_id = Column(String(250), primary_key=True)
     email = Column(String(250))
+    password = Column(String(250))
     phone_number = Column(String(250))
 
 class Recruiter(Base):
@@ -30,6 +31,7 @@ class Recruiter(Base):
     __tablename__ = 'recruiters'
     id = Column(Integer, autoincrement=True)
     email = Column(String(250))
+    password = Column(String(250))
     full_name = Column(String(250))
     job_role = Column(String(250))
     number_of_roles_assigned = Column(Integer)
@@ -68,3 +70,4 @@ class BusinessPartner(Base):
     id = Column(Integer, primary_key=True, autoincrement=True)
     full_name = Column(String(250))
     email = Column(String(250))
+    password = Column(String(250))

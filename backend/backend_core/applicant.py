@@ -1,5 +1,6 @@
 """ This is the Applicant controller class """
 import backend_core
+import bcrypt
 from sqlalchemy.exc import InvalidRequestError, NoResultFound
 
 
@@ -21,9 +22,10 @@ class Applicant:
         #self.resume = Column(BLOB)
         self.applicant_id = ""
         self.email = ""
+        self.password = ""
         self.phone_number = ""
 
-    def create_applicant(self, f_name, l_name, email):
+    def create_applicant(self, f_name, l_name, email, password):
         """ This adds applicants to the DB
         @f_name: first name of the applicant
         @l_name: last name of the applicant
@@ -33,9 +35,9 @@ class Applicant:
         try:
             backend_core.db.find_applicant_by(email=email)
         except Exception:
-            applicant = backend_core.db.add_applicant(f_name, l_name, email)
-            self.applicant_id = applicant.applicant_id
-            self.email = applicant.email
+            applicant = backend_core.db.add_applicant(f_name, l_name, email, password)
+            # self.applicant_id = applicant.applicant_id
+            # self.email = applicant.email
             return applicant
         raise ValueError("Applicant with email {} already exists".format(email))
 

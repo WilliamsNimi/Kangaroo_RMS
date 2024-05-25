@@ -1,13 +1,14 @@
 """ The business partner module """
 import backend_core
 from backend_core.model import Base, Vacancy
+from flask import g
 import uuid
 import datetime
 
 
 class BusinessPartner:
     """ The Business partner Class """
-    def create_business_partner(self, email, full_name):
+    def create_business_partner(self, email, full_name, password):
         """ Adds a new business partner to the db
         @email: the email of the business partner to be added
         @full_name: the full name of the business partner to be added
@@ -16,7 +17,7 @@ class BusinessPartner:
             backend_core.db.find_business_partner_by(email=email)
         except Exception:
             # self.full_name = full_name
-            return backend_core.db.add_business_partner(email, full_name)
+            return backend_core.db.add_business_partner(email, full_name, password)
         raise ValueError("BP with email {} already exists".format(email))
 
     def update_profile(self, email, **kwargs):
@@ -47,14 +48,19 @@ class BusinessPartner:
         @recruiter_id: The recruiter requested for
         @job_description_summary: The summary of the job
         Return: Returns a vacancy object"""
+        try:
+            requisition_id = str(uuid.uuid4())
+            date_of_requisition = datetime.datetime.now()
+            bp = backend_core.db.find_business_partner_by(email=g.email)
+            bp_name = bp.full_name
 
-        requisition_id = str(uuid.uuid4())
-        date_of_requisition = datetime.datetime.now()
-        bp_name = "Temporary Business Partner"
+            new_vacancy = backend_core.db.add_vacancy(job_title, department, unit, line_manager, number_of_open_positions,
+            date_of_requisition, bp_name, location, job_description_summary, requisition_id)
+            return new_vacancy
+        except Exception as error:
+            print(error)
+            return False
 
-        new_vacancy = backend_core.db.add_vacancy(job_title, department, unit, line_manager, number_of_open_positions,
-        date_of_requisition, bp_name, location, job_description_summary, requisition_id)
-        return new_vacancy
     
     def find_business_partner(self, email):
         """

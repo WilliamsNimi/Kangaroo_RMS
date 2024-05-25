@@ -10,14 +10,14 @@ class Recruiter:
         self.job_role = "Recruiter"
         self.number_of_roles_assigned = 0
 
-    def create_recruiter(self, email, full_name):
+    def create_recruiter(self, email, full_name, password):
         """ adds a new recruiter 
         @email: email address of the recruiter
         @full_name: full name of the recruiter"""
         try:
             backend_core.db.find_recruiter_by(email=email)
         except Exception:
-            return backend_core.db.add_recruiter(email, full_name)
+            return backend_core.db.add_recruiter(email, full_name, password)
         raise ValueError("Recruiter with email {} already exists".format(email))
 
     def update_profile(self, recruiter_id, **kwargs):
@@ -28,9 +28,11 @@ class Recruiter:
         try:
             recruiter = backend_core.db.find_recruiter_by(recruiter_id=recruiter_id)
             backend_core.db.update_recruiter(recruiter_id, **kwargs)
-            return "Profile updated successfully"
+            print("Profile updated successfully")
+            return True
         except Exception as err:
-            return err
+            print(err)
+            return False
 
     def update_vacancy(self, job_id, **kwargs):
         """ Updates the Vacancy with the given job_id
