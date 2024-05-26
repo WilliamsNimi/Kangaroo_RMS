@@ -33,20 +33,19 @@ class RedisSession:
         if not session_token:
             return False
         user_id = self._redis.get(str(session_token))
-        
         if user_id:
-            user_type = user_id.decode('utf8').split('_')[0]
+            user_type = user_id.decode('utf8').split('|')[0]
             try:
                 if user_type == 'applicant':
-                    applicant_id = user_id.decode('utf8').split('_')[1]
+                    applicant_id = user_id.decode('utf8').split('|')[1]
                     backend_core.db.find_applicant_by(applicant_id=applicant_id)
                     return ['applicant_id', applicant_id]
                 if user_type == 'recruiter':
-                    recruiter_id = user_id.decode('utf8').split('_')[1]
+                    recruiter_id = user_id.decode('utf8').split('|')[1]
                     backend_core.db.find_recruiter_by(recruiter_id=recruiter_id)
                     return ['recruiter_id', recruiter_id]
                 if user_type == 'business_partner':
-                    email = user_id.decode('utf8').split('_')[1]
+                    email = user_id.decode('utf8').split('|')[1]
                     backend_core.db.find_business_partner_by(email=email)
                     return ['email', email]
             except Exception:
@@ -61,7 +60,7 @@ class RedisSession:
             return False
         if user_type in ['business_partner', 'recruiter', 'applicant']:
             session_token = uuid4()
-            self._redis.set(str(session_token), "{}_{}".format(user_type, key_attribute), ex=5000)
+            self._redis.set(str(session_token), "{}|{}".format(user_type, key_attribute), ex=5000)
             return session_token
         return False
     
@@ -90,10 +89,9 @@ class RedisSession:
         """
         Checks if path needs authentication
         """
-        excluded_paths = ['/kangaroo/v1/applicant/new/', '/kangaroo/v1/recruiter/new/', '/kangaroo/v1/bp/new/', '/kangaroo/v1/recruiter/login/'
+        excluded_paths = ['/', '/kangaroo/v1/applicant/signup/', '/kangaroo/v1/recruiter/signup/', '/kangaroo/v1/bp/signup/', '/kangaroo/v1/recruiter/login/',
                           '/kangaroo/v1/recruiter/logout/', '/kangaroo/v1/bp/login/', '/kangaroo/v1/bp/logout/', '/kangaroo/v1/applicant/login/',
                           '/kangaroo/v1/applicant/logout/']
-
         if not path:
             return True
         if path[-1] != '/':

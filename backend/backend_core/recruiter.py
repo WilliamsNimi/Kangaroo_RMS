@@ -45,23 +45,7 @@ class Recruiter:
             return "Vacancy updated successfully"
         except Exception as err:
             return err
-        
-    
-    # --------------------- I(JBA) ADDED THE METHODS BELOW --------------------------- #
-    
-    # def find_vacancy(self, job_id):
-    #     """Attempts finding vacancy from the db
-        
-    #     Keyword arguments:
-    #     @job_id: Identifies a specific vacancy object
-    #     Return: Boolean
-    #     """
-    #     try:
-    #        dbObject.find_vacancy_by(job_id=job_id)
-    #        return True
-    #     except Exception:
-    #         return False
-    
+
     def delete_job(self, job_id):
         """
         Deletes job from the db if it exists
@@ -69,8 +53,6 @@ class Recruiter:
         Returns: Boolean
         """
         return backend_core.db.delete_vacancy(job_id=job_id)
-    
-    # ------------ MAY 20 Changes Below ------------ #
     
     def to_dict(self):
         """Convert instance into dict format"""

@@ -37,8 +37,7 @@ def recruiter_login_post():
     Recruiter login
     """
     try:
-        # recruiter_dict = request.form.to_dict()
-        recruiter_dict = request.get_json()
+        recruiter_dict = request.form.to_dict()
         if recruiter_dict:
             recruiter_details = recruiter_auth.verify_credentials(**recruiter_dict)
             if recruiter_details:
@@ -49,7 +48,8 @@ def recruiter_login_post():
                     'session_token', 
                     str(session_token), 
                     httponly=True, 
-                    secure=False, 
+                    secure=False,
+                    path='/kangaroo/v1/recruiter'
                     # samesite='Lax'
                 )
                 return response
@@ -86,23 +86,21 @@ def add_recruiter():
     """
     Adds a recruiter to the db
     """
-    if not request.get_json():
+    if not request.form.to_dict():
         abort(400)
-    recruiter_details = request.get_json()
+    recruiter_details = request.form.to_dict()
     email = recruiter_details.get('email')
     full_name = recruiter_details.get('full_name')
     password = recruiter_details.get('password')
     
-    if not email or not full_name or not password:
+    if not email or not password or not full_name:
         abort(400)
     try:
         recruiterObj = recruiter.create_recruiter(email, full_name, password)
         
         if recruiterObj:
-            del recruiterObj.__dict__["_sa_instance_state"]
-            del recruiterObj.__dict__["password"]
-            recruiterObj.__dict__['__class__'] = (str(type(recruiterObj)).split('.')[-1]).split('\'')[0]
-        return jsonify({'recruiter': recruiterObj.__dict__, 'success': True}), 201
+            return redirect(url_for('kangaroo.recruiter_login_get'))
+        return jsonify({'success': False}), 409
     except Exception as err:
         print(err)
         return jsonify({'success': False}), 409
@@ -113,17 +111,22 @@ def recruiter_update_profile():
     """
     Updates profile of recruiter
     """
-    if not request.get_json():
+    if not request.form.to_dict():
         abort(400)
-    update_details = request.get_json()
+    update_details = request.form.to_dict()
     update_details.pop('recruiter_id', None)
     update_details.pop('id', None)
+    update_details.pop('email', None)
     recruiter_id = g.recruiter_id
 
     if not recruiter_id:
         abort(400)
     try:
         if recruiter.update_profile(recruiter_id, **update_details):
+            if 'password' in update_details:
+                session_token = request.cookies.get('session_token')
+                session_auth.delete_session(session_token)
+                return redirect(url_for('kangaroo.recruiter_login_get'))
             return jsonify({'success': True})
         return jsonify({'success': False}), 500
     except Exception as error:

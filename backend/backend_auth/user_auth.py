@@ -90,7 +90,6 @@ class BPAuth:
                     password = kwargs[key]
                     del kwargs[key]
             bp = backend_core.db.find_business_partner_by(**kwargs)
-            print(bp.__dict__)
             if bp and password:
                 if bcrypt.checkpw(password.encode('utf-8'), bp.password.encode('utf-8')):
                     return ['email', bp.email]

@@ -40,8 +40,7 @@ def bp_login_post():
     Business Partner login
     """
     try:
-        # bp_dict = request.form.to_dict()
-        bp_dict = request.get_json()
+        bp_dict = request.form.to_dict()
         if bp_dict:
             bp_details = bp_auth.verify_credentials(**bp_dict)
             if bp_details:
@@ -53,6 +52,7 @@ def bp_login_post():
                     str(session_token), 
                     httponly=True, 
                     secure=False, 
+                    path='/kangaroo/v1/bp'
                     # samesite='Lax'
                 )
                 return response
@@ -97,9 +97,9 @@ def bp_creation():
     """
     Creates new business partner OBJ
     """
-    if not request.get_json():
+    if not request.form.to_dict():
         abort(400)
-    bp_details = request.get_json()
+    bp_details = request.form.to_dict()
     email = bp_details.get('email')
     full_name = bp_details.get('full_name')
     password = bp_details.get('password')
@@ -108,11 +108,9 @@ def bp_creation():
         abort(400)
     try:
         business_obj = bp.create_business_partner(email, full_name, password)
+        
         if business_obj:
-            del business_obj.__dict__["_sa_instance_state"]
-            del business_obj.__dict__["password"]
-            business_obj.__dict__['__class__'] = (str(type(business_obj)).split('.')[-1]).split('\'')[0]
-            return jsonify({'success': True, 'vacancy': business_obj.__dict__}), 201
+            return redirect(url_for('kangaroo.bp_login_get'))
         return jsonify({'success': False}), 500
     except Exception:
         return jsonify({'success': False, 'message': "BP with email {} already exists".format(email)}), 500
@@ -123,9 +121,9 @@ def bp_post_vacancy():
     """
     Creates job to be posted if requisition-id exists
     """
-    if not request.get_json():
+    if not request.form.to_dict():
         abort(400)
-    vacancy_details = request.get_json()
+    vacancy_details = request.form.to_dict()
     vacancy_list = ['job_title', 'department', 'unit',
                 'line_manager', 'number_of_open_positions',
                 'location', 'job_description_summary', 'recruiter_id']
@@ -141,11 +139,12 @@ def bp_post_vacancy():
     recruiter_id = vacancy_details.get('recruiter_id') # Should we not be expecting a recruiter_id?
     
     try:
-        vacancy_created = bp.make_requisition(job_title, department, unit, line_manager,
-                                          number_of_open_positions, location, job_description_summary) 
+        vacancy_created = bp.make_requisition(job_title, department, unit, line_manager, number_of_open_positions, 
+                                              location, job_description_summary, recruiter_id) 
         if vacancy_created:
             del vacancy_created.__dict__["_sa_instance_state"]
             vacancy_created.__dict__['__class__'] = (str(type(vacancy_created)).split('.')[-1]).split('\'')[0]
+            vacancy_created.__dict__['date_of_requisition'] = vacancy_created.date_of_requisition.isoformat()
             return jsonify({'success': True, 'vacancy': vacancy_created.__dict__}), 201
     except Exception as error:
         print(error)
@@ -156,9 +155,9 @@ def bp_update_profile():
     """
     Updates profile of the business partner
     """
-    if not request.get_json():
+    if not request.form.to_dict():
         abort(400)
-    update_details = request.get_json()
+    update_details = request.form.to_dict()
     update_details.pop('email', None)
     update_details.pop('id', None)
     email = g.email
@@ -167,6 +166,10 @@ def bp_update_profile():
         abort(404)
     try:
         if bp.update_profile(email, **update_details):
+            if 'password' in update_details:
+                session_token = request.cookies.get('session_token')
+                session_auth.delete_session(session_token)
+                return redirect(url_for('kangaroo.bp_login_get'))
             return jsonify({'success': True})
         return jsonify({'success': False}), 500
     except Exception as error:
@@ -178,10 +181,7 @@ def bp_delete():
     """
     Deletes BP object from the database
     """
-    if not request.get_json():
-        abort(400)
-    bp_details = request.get_json()
-    email = bp_details.get('email')
+    email = g.email
     if not email:
         abort(404)
     try:
@@ -189,6 +189,8 @@ def bp_delete():
             abort(404)
         success = bp.delete_business_partner(email=email)
         if success:
+            session_token = request.cookies.get('session_token')
+            session_auth.delete_session(session_token)
             return jsonify({'success': True})
         return jsonify({'success': False}), 500 
     except Exception as error:

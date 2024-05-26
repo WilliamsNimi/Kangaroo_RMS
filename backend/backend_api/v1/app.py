@@ -3,7 +3,7 @@
 Kangaroo API application implementation
 """
 from backend_api.v1.views import kangaroo
-from flask import Flask, request, g, jsonify, abort, redirect, url_for
+from flask import Flask, request, g, jsonify, abort
 import backend_auth
 
 

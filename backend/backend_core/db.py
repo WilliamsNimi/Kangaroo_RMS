@@ -69,15 +69,15 @@ class DB:
             return None
 
     def add_vacancy(self, j_title, dept, unit, l_manager, no_open_pos,
-    date_of_req, bp, location, jd_summary, req_id) -> Vacancy:
+    date_of_req, bp, location, jd_summary, req_id, recruiter_id) -> Vacancy:
         """ This method adds a Vacancy to the db
         Return: Returns the new vacancy object
         """
         try:
             job_id = uuid.uuid4()
-            vacancy = Vacancy(job_title = j_title, department = dept, unit = unit, line_manager = l_manager, 
-            job_id = str(job_id), number_of_open_positions = no_open_pos, date_of_requisition = date_of_req,
-            business_partner = bp, location = location, job_description_summary = jd_summary, requisition_id=req_id)
+            vacancy = Vacancy(job_title = j_title, department = dept, unit = unit, line_manager = l_manager, job_id = str(job_id),
+            number_of_open_positions = no_open_pos, date_of_requisition = date_of_req, business_partner = bp, location = location,
+            job_description_summary = jd_summary, recruiter_id=recruiter_id, requisition_id=req_id, approval_status='Unapproved', publish_status='Unpublished')
 
             self._session.add(vacancy)
             self._session.commit()

@@ -16,7 +16,6 @@ class BusinessPartner:
         try:
             backend_core.db.find_business_partner_by(email=email)
         except Exception:
-            # self.full_name = full_name
             return backend_core.db.add_business_partner(email, full_name, password)
         raise ValueError("BP with email {} already exists".format(email))
 
@@ -37,7 +36,7 @@ class BusinessPartner:
 
 
     def make_requisition(self, job_title, department, unit, line_manager,
-    number_of_open_positions, location, job_description_summary):
+    number_of_open_positions, location, job_description_summary, recruiter_id):
         """ creates a requisition for a vacancy
         @job_title: the job role requisition is made for
         @department: the department the job role sits in
@@ -55,12 +54,11 @@ class BusinessPartner:
             bp_name = bp.full_name
 
             new_vacancy = backend_core.db.add_vacancy(job_title, department, unit, line_manager, number_of_open_positions,
-            date_of_requisition, bp_name, location, job_description_summary, requisition_id)
+            date_of_requisition, bp_name, location, job_description_summary, requisition_id, recruiter_id)
             return new_vacancy
         except Exception as error:
             print(error)
             return False
-
     
     def find_business_partner(self, email):
         """
