@@ -1,0 +1,179 @@
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="../style.css" />
+    <title>Home</title>
+  </head>
+  <body>
+    <div id="overlay" class="overlay"></div>
+    <!-- Add this line for overlay -->
+    <div class="stop-scroll" id="disable-scroll">
+      <div class="content-cont">
+        <div>
+          <div class="test">
+            <header class="nav">
+              <div class="nav-container">
+                <div class="nav-logo">
+                  <img src="../assets/logoipsum-280.svg" alt="" />
+                </div>
+                <div>
+                  <ul class="nav-links">
+                    <li class="emp tooltipfour" id="topnav">
+                      <div class="profile">
+                        
+                        <div>Welcome Mr. Recruiter</div>
+                        <div class="profile-img">
+                          <img
+                            src="../assets/profile.jpg"
+                            alt="pictue of a beautiful dog in red bandana"
+                          />
+                        </div>
+                        <img src="../assets/Arrow - Down.svg" alt="arrow down" />
+                        <span class="tooltiptext" id="tooltiptext">
+                          <a href="../Profile.html">
+                            <div class="space-btw mb-5 profile-hover">
+                              <div>
+                                <span class="tip-header">Profile</span>
+                                <p class="tip-header-desc">
+                                  View Account Information
+                                </p>
+                              </div>
+                              <img
+                                src="../assets/Arrow - Bottom - Right.svg"
+                                alt=""
+                              />
+                            </div>
+                          </a>
+                          <a href="SignIn.html">
+                            <div class="space-btw profile-hover">
+                              <div>
+                                <span class="tip-header">Sign Out</span>
+                                <p class="tip-header-desc">
+                                  Requires you to sign in again next time
+                                </p>
+                              </div>
+                              <img
+                                src="../assets/Arrow - Bottom - Right.svg"
+                                alt=""
+                              />
+                            </div>
+                          </a>
+                        </span>
+                      </div>
+                      <!-- <div class="link-container" style="margin-top: 6px"></div> -->
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </header>
+          </div>
+          <section class="bg-blue">
+            <div class="main-container">
+              <h4>Welcome Back {Recruiter Name}</h4>
+              <div class="search-container-users">
+                <div class="search-input">
+                  <input type="text" placeholder="Search Applicants..." />
+                  <div class="gradient-buttons">
+                    <div class="gradient-button-content">Search</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+          <section class="main-content">
+            <div class="main-content-container">
+              <div class="page-nav-content">
+                <div class="page-nav">
+                  <a href="Home.html">
+                    <div class="page-nav-item">
+                      <div class="page-nav-indicator"></div>
+                      <div>
+                        <h3 class="pni-header">Home</h3>
+                        <div class="pni-desc">
+                          Job posts
+                        </div>
+                      </div>
+                    </div>
+                  </a>
+                  <a href="newRecruiter.html">
+                    <div class="page-nav-item-active">
+                      <div class="page-nav-indicator-active"></div>
+                      <div>
+                        <h3 class="pni-header">Add New Recruiter</h3>
+                        <div class="pni-desc">
+                          Click here to add a new recruiter
+                        </div>
+                      </div>
+                    </div>
+                  </a>
+                  <a href="newBP.html">
+                    <div class="page-nav-item">
+                      <div class="page-nav-indicator"></div>
+                      <div>
+                        <h3 class="pni-header">Add New Business Partner</h3>
+                        <div class="pni-desc">
+                          Click Here to Add New Business Partner
+                        </div>
+                      </div>
+                    </div>
+                  </a>
+                </div>
+                <div class="page-content">
+                  <form class="sign-in-form mt-10" style="width: 50%">
+                    <div class="input-div" style="width: calc(75% + 43px)">
+                      <div class="input-div-tooltip">
+                        <input type="text" placeholder="Full Name" />
+                      </div>
+                    </div>
+                    <div class="input-div" style="width: calc(75% + 43px)">
+                      <div class="input-div-tooltip">
+                        <input type="email" placeholder="Email" />
+                      </div>
+                    </div>
+                    <div class="button-group">
+                      <div class="gradient-buttons">
+                        <div class="gradient-button-content">
+                          Create Recruiter
+                        </div>
+                      </div>
+                    </div>
+                  </form>
+                </div>
+                
+              </div>
+            </div>
+          </section>
+          <div id="mySidepanel" class="sidepanel">
+            <div class="back">
+              <img src="../assets/Arrow - Left.svg" alt="back arrow" />
+              <div onclick="closeNav()" class="back-text">Back</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <footer class="footer">
+        <div class="footer-rights">© 2024 All rights reserved</div>
+        <div class="footer-project">Kangaroo</div>
+      </footer>
+    </div>
+    <script>
+      function openNav() {
+        document.getElementById("mySidepanel").style.width = "450px";
+        // document.getElementById("mySidepanel").classList.add("opened");
+        document.getElementById("overlay").style.display = "block";
+        document.getElementById("disable-scroll").style.overflowY = "hidden"; // Add class to indicate sidepanel is open
+      }
+
+      function openTooltip() {
+        document.getElementById("tooltiptext").style.visibility = "visible";
+      }
+
+      function closeNav() {
+        document.getElementById("mySidepanel").style.width = "0";
+        // document.getElementById("mySidepanel").classList.remove("opened");
+        document.getElementById("overlay").style.display = "none"; // Remove class to indicate sidepanel is closed
+      }
+    </script>
+  </body>
+</html>
