@@ -8,6 +8,7 @@ from sqlalchemy.orm.session import Session
 from sqlalchemy.exc import InvalidRequestError
 from sqlalchemy.orm.exc import NoResultFound
 from backend_core.model import Base, Applicant, Recruiter, Vacancy, ApplicantsVacancy, BusinessPartner
+import bcrypt
 import uuid
 
 
@@ -18,9 +19,9 @@ class DB:
     def __init__(self) -> None:
         """Initialize a new DB instance
         """
-        # self._engine = create_engine("sqlite:///kangaroo.db")
-        self._engine = create_engine('mysql+mysqldb://root:Holybible@localhost/kangaroo')
-        # Base.metadata.drop_all(self._engine)
+        self._engine = create_engine("sqlite:///kangaroo.db")
+        # self._engine = create_engine('mysql+mysqldb://root:password@localhost/kangaroo')
+        Base.metadata.drop_all(self._engine)
         Base.metadata.create_all(self._engine)
         self.__session = None
 
@@ -33,13 +34,14 @@ class DB:
             self.__session = DBSession()
         return self.__session
 
-    def add_applicant(self, f_name, l_name, email) -> Applicant:
+    def add_applicant(self, f_name, l_name, email, password) -> Applicant:
         """ This method adds an applicant to the db
         Return: Returns the new applicant object
         """
         try:
             applicant_id = uuid.uuid4()
-            applicant = Applicant(first_name = f_name, last_name = l_name, email = email, applicant_id = str(applicant_id))
+            hashed_pwd = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
+            applicant = Applicant(first_name = f_name, last_name = l_name, email = email, applicant_id = str(applicant_id), password = hashed_pwd)
             self._session.add(applicant)
             self._session.commit()
             self._session.refresh(applicant)
@@ -49,13 +51,14 @@ class DB:
             print(err)
             return None
 
-    def add_recruiter(self, email, full_name) -> Recruiter:
+    def add_recruiter(self, email, full_name, password) -> Recruiter:
         """ This method adds a recruiter to the db
         Return: Returns the new recruiter object
         """
         try:
             recruiter_id = uuid.uuid4()
-            recruiter = Recruiter(full_name = full_name, email = email, recruiter_id = str(recruiter_id))
+            hashed_pwd = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
+            recruiter = Recruiter(full_name = full_name, email = email, recruiter_id = str(recruiter_id), password = hashed_pwd)
             self._session.add(recruiter)
             self._session.commit()
             self._session.refresh(recruiter)
@@ -66,15 +69,15 @@ class DB:
             return None
 
     def add_vacancy(self, j_title, dept, unit, l_manager, no_open_pos,
-    date_of_req, bp, location, jd_summary, req_id) -> Vacancy:
+    date_of_req, bp, location, jd_summary, req_id, recruiter_id) -> Vacancy:
         """ This method adds a Vacancy to the db
         Return: Returns the new vacancy object
         """
         try:
             job_id = uuid.uuid4()
-            vacancy = Vacancy(job_title = j_title, department = dept, unit = unit, line_manager = l_manager, 
-            job_id = str(job_id), number_of_open_positions = no_open_pos, date_of_requisition = date_of_req,
-            business_partner = bp, location = location, job_description_summary = jd_summary, recruiter_id = 'a49abf74-4946-4078-b485-db083cc89c0b', requisition_id=req_id)
+            vacancy = Vacancy(job_title = j_title, department = dept, unit = unit, line_manager = l_manager, job_id = str(job_id),
+            number_of_open_positions = no_open_pos, date_of_requisition = date_of_req, business_partner = bp, location = location,
+            job_description_summary = jd_summary, recruiter_id=recruiter_id, requisition_id=req_id, approval_status='Unapproved', publish_status='Unpublished')
 
             self._session.add(vacancy)
             self._session.commit()
@@ -98,6 +101,8 @@ class DB:
         for key in kwargs.keys():
             if not hasattr(Applicant, key):
                 raise InvalidRequestError
+            if key == 'password':
+                del kwargs[key]
         applicant_found = self._session.query(Applicant).filter_by(**kwargs).first()
         if not applicant_found:
             raise NoResultFound
@@ -116,6 +121,8 @@ class DB:
         for key in kwargs.keys():
             if not hasattr(Recruiter, key):
                 raise InvalidRequestError
+            if key == 'password':
+                del kwargs[key]
         recruiter_found = self._session.query(Recruiter).filter_by(**kwargs).first()
         if not recruiter_found:
             raise NoResultFound
@@ -144,48 +151,62 @@ class DB:
         @applicant_id: user Id to be found
         Return: Returns none
         """
-        applicant = self.find_applicant_by(applicant_id=applicant_id)
-        for key, value in kwargs.items():
-            if not hasattr(Applicant, key):
-                raise ValueError
-            else:
-                setattr(applicant, key, value)
-        self._session.commit()
-        return None
+        try:
+            applicant = self.find_applicant_by(applicant_id=applicant_id)
+            for key, value in kwargs.items():
+                if not hasattr(Applicant, key):
+                    raise ValueError
+                else:
+                    if key == 'password':
+                        value = bcrypt.hashpw(str(value).encode('utf-8'), bcrypt.gensalt())
+                    setattr(applicant, key, value)
+            self._session.commit()
+            return True
+        except Exception:
+            self._session.rollback()
+            return None
 
     def update_recruiter(self, recruiter_id, **kwargs) -> None:
         """ This method updates recruiters table based on id
         @recruiter_id: recruiter Id to be found
         Return: Returns none
         """
-        recruiter = self.find_recruiter_by(recruiter_id=recruiter_id)
-        for key, value in kwargs.items():
-            if not hasattr(Recruiter, key):
-                raise ValueError
-            else:
-                setattr(recruiter, key, value)
-        self._session.commit()
-        return None
+        try:
+            recruiter = self.find_recruiter_by(recruiter_id=recruiter_id)
+            for key, value in kwargs.items():
+                if not hasattr(Recruiter, key):
+                    raise ValueError
+                else:
+                    if key == 'password':
+                        value = bcrypt.hashpw(str(value).encode('utf-8'), bcrypt.gensalt())
+                    setattr(recruiter, key, value)
+            self._session.commit()
+            return True
+        except Exception:
+            return None
 
     def update_vacancy(self, job_id, **kwargs) -> None:
         """ This method updates vacancy table based on id
         @job_id: job Id to be found
         Return: Returns none
         """
-        vacancy = self.find_vacancy_by(job_id=job_id)
-        for key, value in kwargs.items():
-            if not hasattr(Vacancy, key):
-                raise ValueError
-            else:
-                setattr(vacancy, key, value)
-        self._session.commit()
-        return None
+        try:
+            vacancy = self.find_vacancy_by(job_id=job_id)
+            for key, value in kwargs.items():
+                if not hasattr(Vacancy, key):
+                    raise ValueError
+                else:
+                    setattr(vacancy, key, value)
+            self._session.commit()
+            return True
+        except Exception:
+            return None
 
     def add_applications(self, applicant_id, job_id):
         """ This function logs every application in the applicants_vacancy table
         """
         try:
-            application = ApplicantsVacancy(applicant_id = applicant_id, job_id=job_id)
+            application = ApplicantsVacancy(applicant_id = applicant_id, job_id = job_id)
             self._session.add(application)
             self._session.commit()
             self._session.refresh(application)
@@ -196,13 +217,14 @@ class DB:
             print(err)
             return None
     
-    def add_business_partner(self, email, full_name):
+    def add_business_partner(self, email, full_name, password):
         """ Add a new business partner
         @email: email of the business partner
         @full_name: full name of the business partner
         Return: the BusinessPartner object """
         try:
-            business_partner = BusinessPartner(email = email, full_name = full_name)
+            hashed_pwd = bcrypt.hashpw(str(password).encode('utf-8'), bcrypt.gensalt())
+            business_partner = BusinessPartner(email = email, full_name = full_name, password = hashed_pwd)
             self._session.add(business_partner)
             self._session.commit()
             self._session.refresh(business_partner)
@@ -235,20 +257,20 @@ class DB:
         @email: email to be found
         Return: Returns none
         """
-        bp = self.find_business_partner_by(email=email)
-        for key, value in kwargs.items():
-            if not hasattr(BusinessPartner, key):
-                raise ValueError
-            else:
-                setattr(bp, key, value)
-        self._session.commit()
-        return None
-    
-    
-    #   ------------------------------ I(JBA) ADDED THE FUNCTIONS BELOW -----------------------------   #
-    
-    def find_applicants_by(self, **kwargs) -> Applicant: # Redundant method, probably a bool to be used to switch queries
-                                                         # of earlier method
+        try:
+            bp = self.find_business_partner_by(email=email)
+            for key, value in kwargs.items():
+                if not hasattr(BusinessPartner, key):
+                    raise ValueError
+                else:
+                    if key == 'password':
+                        value = bcrypt.hashpw(str(value).encode('utf-8'), bcrypt.gensalt())
+                    setattr(bp, key, value)
+            self._session.commit()
+        except Exception:
+            return None
+
+    def find_applicants_by(self, **kwargs) -> Applicant:
         """ A method to search the db
         @kwargs: Key Value items to search for in the db
         Return: Returns all records in the table with matching substring
@@ -320,16 +342,32 @@ class DB:
         for applicant in applicants:
             applicant_list.append((applicant.first_name, applicant.email))
         return applicant_list
-    
-    # ------------------- MAY 20 Changes Below ------------------ #
 
     def delete_recruiter(self, recruiter_id):
         """ This method Deletes a recruiter from the db
             Returns Boolean
         """
+        if not recruiter_id:
+            return False
         try:
             recruiterObj = self.find_recruiter_by(recruiter_id=recruiter_id)
             self._session.delete(recruiterObj)
+            self._session.commit()
+            return True
+        except (InvalidRequestError, NoResultFound) as err:
+            self._session.rollback()
+            print(err)
+            return False
+
+    def delete_business_partner(self, email):
+        """ This method Deletes a recruiter from the db
+            Returns Boolean
+        """
+        if not email:
+            return False
+        try:
+            bpObj = self.find_business_partner_by(email=email)
+            self._session.delete(bpObj)
             self._session.commit()
             return True
         except (InvalidRequestError, NoResultFound) as err:
@@ -359,14 +397,12 @@ class DB:
             vacancy_list.append(self.to_dict(vacancy))
         return vacancy_list
     
-    def to_dict(self, object):
-        """Convert instance into dict format"""
-        dictionary = {}
-        dictionary.update(object.__dict__)
-        dictionary.update({'__class__':
-                          (str(type(object)).split('.')[-1]).split('\'')[0]})
-        dictionary['date_of_requisition'] = object.date_of_requisition.isoformat()
+    def close(self):
+        """
+        Closes current session with the db for each API request
+        """
+        self._session.close()
 
-        if "_sa_instance_state" in dictionary.keys():
-            del dictionary["_sa_instance_state"]
-        return dictionary
+ 
+
+# dictionary['date_of_requisition'] = object.date_of_requisition.isoformat()
