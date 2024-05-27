@@ -3250,3 +3250,6 @@ ul li {
     text-align: center;
     padding-top: 10px;
 }
+label{
+    font-family: customFontLight;
+}
