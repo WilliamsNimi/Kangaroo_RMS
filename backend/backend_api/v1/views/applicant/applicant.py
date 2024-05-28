@@ -32,7 +32,7 @@ def applicant_login_get():
         if applicant_details:
             setattr(g, applicant_details[0], applicant_details[1])
             return redirect(url_for('kangaroo.applicant_home'))
-    return jsonify({'success': True, 'message': 'This is the Applicant login page'})
+    return render_template("applicant/SignIn.html")
 
 
 @applicant_bp.route('/applicant/login', methods=['POST'], strict_slashes=False)
