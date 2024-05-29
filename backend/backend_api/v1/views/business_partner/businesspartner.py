@@ -18,8 +18,7 @@ business_partner_bp = Blueprint(
 @business_partner_bp.route('/bp/home', methods=['GET'], strict_slashes=False)
 def bp_home():
     """
-    Home page of business partner
-    jsonify({'success': True, 'message': 'Welcome Home Business Partner!'})
+    Signin page of business partner
     """
     return render_template("businesspartner/SignIn.html")
 
@@ -27,9 +26,15 @@ def bp_home():
 def bp_forgot_password():
     """
     Home page of business partner
-    jsonify({'success': True, 'message': 'Welcome Home Business Partner!'})
     """
     return render_template("businesspartner/PasswordRecovery.html")
+
+@business_partner_bp.route('/bp/profile', methods=['GET'], strict_slashes=False)
+def bp_profile():
+    """
+    profile page of business partner
+    """
+    return render_template("businesspartner/Profile.html")
 
 @business_partner_bp.route('/bp/homepage', methods=['GET'], strict_slashes=False)
 def bp_homepage():
@@ -50,8 +55,8 @@ def bp_login_get():
         bp_details = session_auth.verify_session(session_token)
         if bp_details:
             setattr(g, bp_details[0], bp_details[1])
-            return redirect(url_for('kangaroo.bp_home'))
-    return jsonify({'success': True, 'message': 'This is the Business Partner login page'})
+            return redirect(url_for('business_partner_bp.bp_home'))
+    return redirect(url_for('business_partner_bp.bp_homepage'))
 
 
 
@@ -66,7 +71,7 @@ def bp_login_post():
             bp_details = bp_auth.verify_credentials(**bp_dict)
             if bp_details:
                 setattr(g, bp_details[0], bp_details[1])
-                response = make_response(redirect(url_for('kangaroo.bp_home')))
+                response = make_response(redirect(url_for('business_partner_bp.bp_homepage')))
                 session_token = session_auth.create_session('business_partner', bp_details[1])
                 response.set_cookie(
                     'session_token', 
@@ -77,10 +82,10 @@ def bp_login_post():
                     # samesite='Lax'
                 )
                 return response
-        return redirect(url_for('kangaroo.bp_login_get'))
+        return redirect(url_for('business_partner_bp.bp_login_get'))
     except Exception as error:
         print(error)
-        return redirect(url_for('kangaroo.bp_login_get'))
+        return redirect(url_for('business_partner_bp.bp_login_get'))
 
 
 @business_partner_bp.route('/bp/logout', methods=['POST'], strict_slashes=False)
