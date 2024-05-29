@@ -21,7 +21,16 @@ def recruiter_home():
     Home page of recruiter
     jsonify({'success': True, 'message': 'Welcome Home RECRUITER!'})
     """
-    return render_template("recruiter/SignIn.html")
+    return render_template("recruiter/Signup.html")
+
+@recruiter_bp.route('/recruiter/homepage', methods=['GET'], strict_slashes=False)
+def recruiter_homepage():
+    """
+    TODO: Build a solid redirect
+    Home page of recruiter
+    jsonify({'success': True, 'message': 'Welcome Home RECRUITER!'})
+    """
+    return render_template("recruiter/Home.html")
 
 
 @recruiter_bp.route('/recruiter/login', methods=['GET'], strict_slashes=False)
@@ -34,22 +43,22 @@ def recruiter_login_get():
         recruiter_details = session_auth.verify_session(session_token)
         if recruiter_details:
             setattr(g, recruiter_details[0], recruiter_details[1])
-            return redirect(url_for('kangaroo.recruiter_home'))
-    return jsonify({'success': True, 'message': 'This is the Recruiter login page'})
+            return render_template("recruiter/Home.html")
+    return render_template("recruiter/SignIn.html")
 
 
 @recruiter_bp.route('/recruiter/login', methods=['POST'], strict_slashes=False)
 def recruiter_login_post():
     """
     Recruiter login
-    """
+    
     try:
         recruiter_dict = request.form.to_dict()
         if recruiter_dict:
             recruiter_details = recruiter_auth.verify_credentials(**recruiter_dict)
             if recruiter_details:
                 setattr(g, recruiter_details[0], recruiter_details[1])
-                response = make_response(redirect(url_for('kangaroo.recruiter_home')))
+                response = make_response(redirect(url_for('recruiter_bp.recruiter_homepage')))
                 session_token = session_auth.create_session('recruiter', recruiter_details[1])
                 response.set_cookie(
                     'session_token', 
@@ -60,32 +69,46 @@ def recruiter_login_post():
                     # samesite='Lax'
                 )
                 return response
-        return redirect(url_for('kangaroo.recruiter_login_get'))
+        return redirect(url_for('recruiter_bp.recruiter_homepage'))
     except Exception as error:
         print(error)
-        return redirect(url_for('kangaroo.recruiter_login_get'))
+        return redirect(url_for('recruiter_bp.recruiter_login_get')) """
+    return redirect(url_for('recruiter_bp.recruiter_homepage'))
 
-
-@recruiter_bp.route('/recruiter/logout', methods=['POST'], strict_slashes=False)
+@recruiter_bp.route('/recruiter/logout', methods=['GET', 'POST'], strict_slashes=False)
 def recruiter_logout():
     """
     Logs out currently logged in user
     """
-    from backend_api.v1.app import app
+    from app import app
 
     session_token = request.cookies.get('session_token')
     if session_token:
         session_auth.delete_session(session_token)
-        return redirect(url_for('home'))
+        return render_template("recruiter/SignIn.html")
     return jsonify({'error': 'session token not found'}), 404
 
 
-@recruiter_bp.route('/recruiter/signup', methods=['GET'], strict_slashes=False)
+@recruiter_bp.route('/recruiter/newRecruiter', methods=['GET'], strict_slashes=False)
 def create_recruiter():
     """
     Sends form for recruiter creation
     """
-    return render_template('new_recruiter.html')
+    return render_template('recruiter/newRecruiter.html')
+
+@recruiter_bp.route('/recruiter/newBP', methods=['GET'], strict_slashes=False)
+def create_BP():
+    """
+    Sends form for BP creation
+    """
+    return render_template('recruiter/newBP.html')
+
+@recruiter_bp.route('/recruiter/profile', methods=['GET'], strict_slashes=False)
+def recruiter_profile():
+    """
+    Sends form for BP creation
+    """
+    return render_template('recruiter/Profile.html')
 
 
 @recruiter_bp.route('/recruiter/signup', methods=['POST'], strict_slashes=False)
@@ -106,11 +129,19 @@ def add_recruiter():
         recruiterObj = recruiter.create_recruiter(email, full_name, password)
         
         if recruiterObj:
-            return redirect(url_for('kangaroo.recruiter_login_get'))
-        return jsonify({'success': False}), 409
+            return redirect(url_for('recruiter_bp.recruiter_login_get'))
+        return redirect(url_for('recruiter_bp.recruiter_login_get'))
     except Exception as err:
         print(err)
         return jsonify({'success': False}), 409
+    
+@recruiter_bp.route('/recruiter/forgot_password', methods=['GET'], strict_slashes=False)
+def recruiter_forgot_password():
+    """
+    TODO: Build this function properly
+    resets recruiter password
+    """
+    return render_template("recruiter/PasswordRecovery.html")
 
 
 @recruiter_bp.route('/recruiter/profile/update', methods=['PUT'], strict_slashes=False)

@@ -15,7 +15,7 @@
             <header class="nav">
               <div class="nav-container">
                 <div class="nav-logo">
-                  <img src="../assets/logoipsum-280.svg" alt="" />
+                  <img src="{{ url_for('static', filename='assets/logoipsum-280.svg')}}" alt="" />
                 </div>
                 <div>
                   <ul class="nav-links">
@@ -24,16 +24,16 @@
                         <div>Welcome Mr. Dumo</div>
                         <div class="profile-img">
                           <img
-                            src="../assets/profile.jpg"
+                            src="{{ url_for('static', filename='assets/profile.jpg')}}"
                             alt="pictue of a beautiful dog in red bandana"
                           />
                         </div>
                         <img
-                          src="../assets/Arrow - Down.svg"
+                          src="{{ url_for('static', filename='assets/Arrow - Down.svg')}}"
                           alt="arrow down"
                         />
                         <span class="tooltiptext" id="tooltiptext">
-                          <a href="Profile.html">
+                          <a href="{{ url_for('applicant_bp.applicant_profile') }}">
                             <div class="space-btw mb-5 profile-hover">
                               <div>
                                 <span class="tip-header">Profile</span>
@@ -42,12 +42,12 @@
                                 </p>
                               </div>
                               <img
-                                src="../assets/Arrow - Bottom - Right.svg"
+                                src="{{ url_for('static', filename='assets/Arrow - Bottom - Right.svg')}}"
                                 alt=""
                               />
                             </div>
                           </a>
-                          <a href="SignIn.html">
+                          <a href="{{ url_for('applicant_bp.applicant_logout') }}">
                             <div class="space-btw profile-hover">
                               <div>
                                 <span class="tip-header">Sign Out</span>
@@ -56,7 +56,7 @@
                                 </p>
                               </div>
                               <img
-                                src="../assets/Arrow - Bottom - Right.svg"
+                                src="{{ url_for('static', filename='assets/Arrow - Bottom - Right.svg')}}"
                                 alt=""
                               />
                             </div>
@@ -173,7 +173,7 @@
           </section>
           <div id="mySidepanel" class="sidepanel">
             <div class="back">
-              <img src="../assets/Arrow - Left.svg" alt="back arrow" />
+              <img src="{{ url_for('static', filename='assets/Arrow - Left.svg')}}" alt="back arrow" />
               <div onclick="closeNav()" class="back-text">Back</div>
             </div>
           </div>

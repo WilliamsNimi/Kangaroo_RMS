@@ -23,6 +23,21 @@ def bp_home():
     """
     return render_template("businesspartner/SignIn.html")
 
+@business_partner_bp.route('/bp/forgot_password', methods=['GET'], strict_slashes=False)
+def bp_forgot_password():
+    """
+    Home page of business partner
+    jsonify({'success': True, 'message': 'Welcome Home Business Partner!'})
+    """
+    return render_template("businesspartner/PasswordRecovery.html")
+
+@business_partner_bp.route('/bp/homepage', methods=['GET'], strict_slashes=False)
+def bp_homepage():
+    """
+    Home page of business partner
+    jsonify({'success': True, 'message': 'Welcome Home Business Partner!'})
+    """
+    return render_template("businesspartner/Home.html")
 
 @business_partner_bp.route('/bp/login', methods=['GET'], strict_slashes=False)
 def bp_login_get():
@@ -87,7 +102,7 @@ def bp_create_requisition():
     """
     Returns template to create vacancy requisition
     """
-    return render_template('new_requisition.html')
+    return render_template('businesspartner/Requisition.html')
 
 
 @business_partner_bp.route('/bp/signup', methods=['GET'], strict_slashes=False)

@@ -15,7 +15,7 @@
             <header class="nav">
               <div class="nav-container">
                 <div class="nav-logo">
-                  <img src="../assets/logoipsum-280.svg" alt="" />
+                  <img src="{{ url_for('static', filename='assets/logoipsum-280.svg')}}" alt="" />
                 </div>
                 <div>
                   <ul class="nav-links">
@@ -25,11 +25,11 @@
                         <div>Welcome Mr. Recruiter</div>
                         <div class="profile-img">
                           <img
-                            src="../assets/profile.jpg"
+                            src="{{ url_for('static', filename='assets/profile.jpg')}}"
                             alt="pictue of a beautiful dog in red bandana"
                           />
                         </div>
-                        <img src="../assets/Arrow - Down.svg" alt="arrow down" />
+                        <img src="{{ url_for('static', filename='assets/Arrow - Down.svg')}}" alt="arrow down" />
                         <span class="tooltiptext" id="tooltiptext">
                           <a href="Profile.html">
                             <div class="space-btw mb-5 profile-hover">
@@ -40,12 +40,12 @@
                                 </p>
                               </div>
                               <img
-                                src="../assets/Arrow - Bottom - Right.svg"
+                                src="{{ url_for('static', filename='assets/Arrow - Bottom - Right.svg')}}"
                                 alt=""
                               />
                             </div>
                           </a>
-                          <a href="SignIn.html">
+                          <a href="{{ url_for('recruiter_bp.recruiter_logout') }}">
                             <div class="space-btw profile-hover">
                               <div>
                                 <span class="tip-header">Sign Out</span>
@@ -54,7 +54,7 @@
                                 </p>
                               </div>
                               <img
-                                src="../assets/Arrow - Bottom - Right.svg"
+                                src="{{ url_for('static', filename='assets/Arrow - Bottom - Right.svg')}}"
                                 alt=""
                               />
                             </div>
@@ -85,7 +85,7 @@
             <div class="main-content-container">
               <div class="page-nav-content">
                 <div class="page-nav">
-                  <a href="Home.html">
+                  <a href="{{ url_for('recruiter_bp.recruiter_homepage') }}">
                     <div class="page-nav-item">
                       <div class="page-nav-indicator"></div>
                       <div>
@@ -96,7 +96,7 @@
                       </div>
                     </div>
                   </a>
-                  <a href="newRecruiter.html">
+                  <a href="{{ url_for('recruiter_bp.create_recruiter') }}">
                     <div class="page-nav-item-active">
                       <div class="page-nav-indicator-active"></div>
                       <div>
@@ -107,7 +107,7 @@
                       </div>
                     </div>
                   </a>
-                  <a href="newBP.html">
+                  <a href="{{ url_for('recruiter_bp.create_BP') }}">
                     <div class="page-nav-item">
                       <div class="page-nav-indicator"></div>
                       <div>
@@ -146,7 +146,7 @@
           </section>
           <div id="mySidepanel" class="sidepanel">
             <div class="back">
-              <img src="../assets/Arrow - Left.svg" alt="back arrow" />
+              <img src="{{ url_for('static', filename='assets/Arrow - Left.svg')}}" alt="back arrow" />
               <div onclick="closeNav()" class="back-text">Back</div>
             </div>
           </div>

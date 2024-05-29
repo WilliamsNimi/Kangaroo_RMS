@@ -16,22 +16,22 @@
             </div>
         </div>
         <div class="right-pane">
-            <form class="form-elements">
+            <form class="form-elements" action="{{ url_for('applicant_bp.create_applicant_new') }}", method="post">
                 <div class="input-flex">
                     <label for="name">First Name</label>
-                    <input type="text" id="first_name" placeholder="Enter your First Name">
+                    <input type="text" name="first_name" id="first_name" placeholder="Enter your First Name">
                 </div>
                 <div class="input-flex">
                     <label for="name">Last Name</label>
-                    <input type="text" id="last_name" placeholder="Enter your Last Name">
+                    <input type="text" name="last_name" id="last_name" placeholder="Enter your Last Name">
                 </div>
                 <div class="input-flex">
                     <label for="email">Email</label>
-                    <input type="text" id="email" placeholder="Enter your email">
+                    <input type="text" name="email" id="email" placeholder="Enter your email">
                 </div>
                 <div class="input-flex">
                     <label for="email">Password</label>
-                    <input type="password" id="password" placeholder="Enter your password">
+                    <input type="password" name="password" id="password" placeholder="Enter your password">
                 </div>
                 <div class="input-flex">
                     <label for="email">Confirm Password</label>
@@ -40,7 +40,7 @@
                 <div class="forgot-password">
                     <a href="{{ url_for('applicant_bp.applicant_login_get') }}"><p>Already got an account? Sign in</p></a>
                 </div>
-                <div class="full-width"><a href=""><div id="login-button" class="button">Login</div></a></div>
+                <input type="submit" class="btn" value="Sign Up">
             </form>
         </div>
     </div>

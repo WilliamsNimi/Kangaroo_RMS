@@ -16,14 +16,14 @@
             </div>
         </div>
         <div class="right-pane">
-            <form class="form-elements">
+            <form class="form-elements" action="{{ url_for('applicant_bp.applicant_login_post') }}", method="post">
                 <div class="input-flex">
                     <label for="email">Email</label>
-                    <input type="text" id="email" placeholder="Enter your email">
+                    <input type="text" name="email" id="email" placeholder="Enter your email">
                 </div>
                 <div class="input-flex">
                     <label for="email">Password</label>
-                    <input type="password" id="password" placeholder="Enter your password">
+                    <input type="password" name="password" id="password" placeholder="Enter your password">
                 </div>
                 <div class="input-flex">
                   <label for="role">Select your role</label>
@@ -32,9 +32,9 @@
                 </select>
               </div>
                 <div class="forgot-password">
-                    <a href="PasswordRecovery.html"><p>forgot password?</p></a>
+                    <a href="{{ url_for('applicant_bp.applicant_forgot_password') }}"><p>forgot password?</p></a>
                 </div>
-                <div class="full-width"><a href="Recruiter/newRecruiter.html"><div id="login-button" class="button">Login</div></a></div>
+                <input type="submit" class="btn" value="Login">
             </form>
         </div>
     </div>

@@ -15,11 +15,38 @@ applicant_bp = Blueprint(
 @applicant_bp.route('/applicant/home', methods=['GET'], strict_slashes=False)
 def applicant_home():
     """
-    Home page of applicant
-    jsonify({'success': True, 'message': 'Welcome Home APPLICANT!'})
+    Signup page of applicant
     """
     return render_template("applicant/Signup.html")
 
+@applicant_bp.route('/applicant/homepage', methods=['GET'], strict_slashes=False)
+def applicant_homepage():
+    """
+    Home page of applicant
+    """
+    return render_template("applicant/Home.html")
+
+@applicant_bp.route('/jobs', methods=['GET'], strict_slashes=False)
+def applicant_get_jobs():
+    """
+    Home page of applicant
+    """
+    return render_template("applicant/Job.html")
+
+@applicant_bp.route('/applicant/profile', methods=['GET'], strict_slashes=False)
+def applicant_profile():
+    """
+    Get Profile page of Applicant
+    """
+    return render_template("applicant/Profile.html")
+
+@applicant_bp.route('/applicant/forgot_password', methods=['GET'], strict_slashes=False)
+def applicant_forgot_password():
+    """
+    TODO: Build this function properly
+    resets applicant password
+    """
+    return render_template("applicant/PasswordRecovery.html")
 
 @applicant_bp.route('/applicant/login', methods=['GET'], strict_slashes=False)
 def applicant_login_get():
@@ -31,7 +58,7 @@ def applicant_login_get():
         applicant_details = session_auth.verify_session(session_token)
         if applicant_details:
             setattr(g, applicant_details[0], applicant_details[1])
-            return redirect(url_for('kangaroo.applicant_home'))
+            return redirect(url_for('applicant_bp.applicant_home'))
     return render_template("applicant/SignIn.html")
 
 
@@ -46,7 +73,7 @@ def applicant_login_post():
             applicant_details = applicant_auth.verify_credentials(**applicant_dict)
             if applicant_details:
                 setattr(g, applicant_details[0], applicant_details[1])
-                response = make_response(redirect(url_for('kangaroo.applicant_home')))        
+                response = make_response(redirect(url_for('applicant_bp.applicant_homepage')))        
                 session_token = session_auth.create_session('applicant', applicant_details[1])
                 response.set_cookie(
                     'session_token',
@@ -57,10 +84,10 @@ def applicant_login_post():
                     # samesite='Lax'
                 )
                 return response
-        return redirect(url_for('kangaroo.applicant_login_get'))
+        return redirect(url_for('applicant_bp.applicant_login_get'))
     except Exception as error:
         print(error)
-        return redirect(url_for('kangaroo.applicant_login_get'))
+        return redirect(url_for('applicant_bp.applicant_login_get'))
 
 
 @applicant_bp.route('/applicant/logout', methods=['POST'], strict_slashes=False)
@@ -109,7 +136,7 @@ def create_applicant_new():
         applicantObj = applicant.create_applicant(f_name, l_name, email, password)
         
         if applicantObj:
-            return redirect(url_for('kangaroo.applicant_login_get'))
+            return redirect(url_for('applicant_bp.applicant_login_get'))
         return jsonify({'success': False})
     except Exception:
         return jsonify({'success': False, 'message': 'user already exists'}), 409
@@ -143,11 +170,13 @@ def applicant_update_profile():
         return jsonify({'success': False}), 500
 
 
-@applicant_bp.route('/applicant/apply', methods=['POST'], strict_slashes=False)
+@applicant_bp.route('/applicant/apply', methods=['GET', 'POST'], strict_slashes=False)
 def applicant_apply_to_job():
     """
     Applies an applicant to a job
     """
+    if request.method == 'GET':
+        return render_template('applicant/Job.HTML')
     if not request.form.to_dict():
         abort(400)
     job_details = request.form.to_dict()
