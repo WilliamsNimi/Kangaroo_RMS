@@ -22,7 +22,7 @@
                     <li class="emp tooltipfour" id="topnav">
                       <div class="profile">
                         
-                        <div>Welcome Mr. BP</div>
+                        <div>Welcome {{full_name}}</div>
                         <div class="profile-img">
                           <img
                             src="{{ url_for('static', filename='assets/profile.jpg')}}"
@@ -70,7 +70,7 @@
           </div>
           <section class="bg-blue">
             <div class="main-container">
-              <h4>Welcome Back {BP Name}</h4>
+              <h4>Welcome Back {{full_name}}</h4>
               <div class="search-container-users">
                 <div class="search-input">
                   <input type="text" placeholder="Search Applicants..." />
@@ -111,13 +111,13 @@
                 <div class="page-content">
                   <div class="job-card-flex">
                     <div>
-                      <div class="job-title">Job Title: <span>Technical Recruiter</span></div>
-                      <div class="job-title">Approval Status: <span>Approved</span></div>
-                      <div class="job-title">Location: <span>Lagos</span></div>
+                      <div class="job-title">Job Title: <span>{{job_title}}</span></div>
+                      <div class="job-title">Approval Status: <span>{{status}}</span></div>
+                      <div class="job-title">Location: <span>{{location}}</span></div>
                     </div>
                     <div>
-                      <div class="job-title">Number of Applicants: <span>45</span></div>
-                      <div class="job-title">Number of Open Positions: <span>3</span></div>
+                      <div class="job-title">Number of Applicants: <span></span></div>
+                      <div class="job-title">Number of Open Positions: <span>{{number}}</span></div>
                     </div>
                   </div>
                   <div class="job-card-flex">

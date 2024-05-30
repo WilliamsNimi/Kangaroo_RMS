@@ -22,7 +22,7 @@
                     <li class="emp tooltipfour" id="topnav">
                       <div class="profile">
                         
-                        <div>Welcome Mr. Recruiter</div>
+                        <div>Welcome {{full_name}}</div>
                         <div class="profile-img">
                           <img
                             src="{{ url_for('static', filename='assets/profile.jpg')}}"
@@ -69,7 +69,7 @@
           </div>
           <section class="bg-blue">
             <div class="main-container">
-              <h4>Welcome Back {Recruiter Name}</h4>
+              <h4>Welcome Back {{full_name}}</h4>
               <div class="search-container-users">
                 <div class="search-input">
                   <input type="text" placeholder="Search Applicants..." />
@@ -119,24 +119,23 @@
                   </a>
                 </div>
                 <div class="page-content">
-                  <form class="sign-in-form mt-10" style="width: 50%">
+                  <form class="sign-in-form mt-10" style="width: 50%" action="{{ url_for('business_partner_bp.bp_creation') }}" method="post">
                     <div class="input-div" style="width: calc(75% + 43px)">
                       <div class="input-div-tooltip">
-                        <input type="text" placeholder="Full Name" />
+                        <input type="text" name="full_name" placeholder="Full Name" />
                       </div>
                     </div>
                     <div class="input-div" style="width: calc(75% + 43px)">
                       <div class="input-div-tooltip">
-                        <input type="email" placeholder="Email" />
+                        <input type="email" name="email" placeholder="Email" />
                       </div>
                     </div>
-                    <div class="button-group">
-                      <div class="gradient-buttons">
-                        <div class="gradient-button-content">
-                          Create Business Partner
-                        </div>
+                    <div class="input-div" style="width: calc(75% + 43px)">
+                      <div class="input-div-tooltip">
+                        <input type="password" name="password" placeholder="Password" />
                       </div>
                     </div>
+                    <input type="submit" class="btn" value="Create New Business Partner">
                   </form>
                 </div>
                 

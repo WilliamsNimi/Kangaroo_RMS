@@ -6,7 +6,10 @@ from flask import render_template, make_response
 from backend_core import recruiter
 from backend_auth import recruiter_auth, session_auth
 from flask import Blueprint
+import bcrypt
 
+email_ = ""
+fullName = ""
 
 # Defining a blueprint
 recruiter_bp = Blueprint(
@@ -28,9 +31,8 @@ def recruiter_homepage():
     """
     TODO: Build a solid redirect
     Home page of recruiter
-    jsonify({'success': True, 'message': 'Welcome Home RECRUITER!'})
     """
-    return render_template("recruiter/Home.html")
+    return render_template("recruiter/Home.html", full_name=fullName, email=email_)
 
 
 @recruiter_bp.route('/recruiter/login', methods=['GET'], strict_slashes=False)
@@ -43,7 +45,7 @@ def recruiter_login_get():
         recruiter_details = session_auth.verify_session(session_token)
         if recruiter_details:
             setattr(g, recruiter_details[0], recruiter_details[1])
-            return render_template("recruiter/Home.html")
+            return render_template("recruiter/Home.html", full_name=fullName, email=email_)
     return render_template("recruiter/SignIn.html")
 
 
@@ -73,7 +75,19 @@ def recruiter_login_post():
     except Exception as error:
         print(error)
         return redirect(url_for('recruiter_bp.recruiter_login_get')) """
-    return redirect(url_for('recruiter_bp.recruiter_homepage'))
+    if request.method == 'POST' and 'email' in request.form and 'password' in request.form:
+        email = request.form['email']
+        password = request.form['password']
+        recruiter_= recruiter.find_recruiter_by(email)
+        global email_
+        global fullName
+        email_ = recruiter_.email
+        fullName = recruiter_.full_name
+        p_bytes = password.encode('utf-8')
+        hashed_password_val = bcrypt.checkpw(p_bytes, recruiter_.password)
+        if hashed_password_val and email == recruiter_.email:
+            return render_template("recruiter/Home.html", full_name=recruiter_.full_name, email=recruiter_.email)
+    return render_template("recruiter/SignIn.html")
 
 @recruiter_bp.route('/recruiter/logout', methods=['GET', 'POST'], strict_slashes=False)
 def recruiter_logout():
@@ -94,21 +108,21 @@ def create_recruiter():
     """
     Sends form for recruiter creation
     """
-    return render_template('recruiter/newRecruiter.html')
+    return render_template('recruiter/newRecruiter.html', full_name=fullName, email=email_)
 
 @recruiter_bp.route('/recruiter/newBP', methods=['GET'], strict_slashes=False)
 def create_BP():
     """
     Sends form for BP creation
     """
-    return render_template('recruiter/newBP.html')
+    return render_template('recruiter/newBP.html', full_name=fullName, email=email_)
 
 @recruiter_bp.route('/recruiter/profile', methods=['GET'], strict_slashes=False)
 def recruiter_profile():
     """
     Sends form for BP creation
     """
-    return render_template('recruiter/Profile.html')
+    return render_template('recruiter/Profile.html', full_name=fullName, email=email_)
 
 
 @recruiter_bp.route('/recruiter/signup', methods=['POST'], strict_slashes=False)
@@ -164,7 +178,7 @@ def recruiter_update_profile():
             if 'password' in update_details:
                 session_token = request.cookies.get('session_token')
                 session_auth.delete_session(session_token)
-                return redirect(url_for('kangaroo.recruiter_login_get'))
+                return redirect(url_for('recruiter_bp.recruiter_login_get'))
             return jsonify({'success': True})
         return jsonify({'success': False}), 500
     except Exception as error:

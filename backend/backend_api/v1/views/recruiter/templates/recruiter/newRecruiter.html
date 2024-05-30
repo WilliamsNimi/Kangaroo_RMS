@@ -22,7 +22,7 @@
                     <li class="emp tooltipfour" id="topnav">
                       <div class="profile">
                         
-                        <div>Welcome Mr. Recruiter</div>
+                        <div>Welcome {{full_name}}</div>
                         <div class="profile-img">
                           <img
                             src="{{ url_for('static', filename='assets/profile.jpg')}}"
@@ -70,7 +70,7 @@
           </div>
           <section class="bg-blue">
             <div class="main-container">
-              <h4>Welcome Back {Recruiter Name}</h4>
+              <h4>Welcome {{full_name}}</h4>
               <div class="search-container-users">
                 <div class="search-input">
                   <input type="text" placeholder="Search Applicants..." />

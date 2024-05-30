@@ -36,7 +36,7 @@ class BusinessPartner:
 
 
     def make_requisition(self, job_title, department, unit, line_manager,
-    number_of_open_positions, location, job_description_summary, recruiter_id):
+    number_of_open_positions, location, job_description_summary):
         """ creates a requisition for a vacancy
         @job_title: the job role requisition is made for
         @department: the department the job role sits in
@@ -44,17 +44,14 @@ class BusinessPartner:
         @line_manager: the line manager the employee to be hired should report to
         @number_of_open_positions: Number of people we are looking to hire
         @location: the location of the job role
-        @recruiter_id: The recruiter requested for
         @job_description_summary: The summary of the job
         Return: Returns a vacancy object"""
         try:
             requisition_id = str(uuid.uuid4())
             date_of_requisition = datetime.datetime.now()
-            bp = backend_core.db.find_business_partner_by(email=g.email)
-            bp_name = bp.full_name
 
             new_vacancy = backend_core.db.add_vacancy(job_title, department, unit, line_manager, number_of_open_positions,
-            date_of_requisition, bp_name, location, job_description_summary, requisition_id, recruiter_id)
+            date_of_requisition, location, job_description_summary, requisition_id)
             return new_vacancy
         except Exception as error:
             print(error)
@@ -67,11 +64,12 @@ class BusinessPartner:
         if not email:
             return False
         try:
-            backend_core.db.find_business_partner_by(email=email)
-            return True
+            bp = backend_core.db.find_business_partner_by(email=email)
+            return bp
         except Exception as error:
             print(error)
             return False
+        return True
     
     def delete_business_partner(self, email):
         """

@@ -22,7 +22,7 @@
                   <ul class="nav-links">
                     <li class="emp tooltipfour" id="topnav">
                       <div class="profile">
-                        <div>Welcome Mr. Business Partner</div>
+                        <div>Welcome {{full_name}}</div>
                         <div class="profile-img">
                           <img
                             src="{{ url_for('static', filename='assets/profile.jpg')}}"
@@ -86,7 +86,7 @@
               <div class="left-page-profile">
                 <div class="left-page-content">
                   <div class="custom-bold left-page-profile-header">
-                    Blacksheep Odumodu
+                    {{full_name}}
                   </div>
                   <div class="role mid-grey-norm">
                     Your Role:
@@ -99,7 +99,7 @@
                     <hr class="hr-1" />
                     <div>
                       <p class="left-page-field">Email</p>
-                      <p class="left-page-response mt-5">bp@bp.com</p>
+                      <p class="left-page-response mt-5">{{email}}</p>
                     </div>
                     <hr class="hr-2" />
                     <div class="left-page-password-field"></div>

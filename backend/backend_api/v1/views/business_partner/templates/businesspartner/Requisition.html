@@ -22,7 +22,7 @@
                     <li class="emp tooltipfour" id="topnav">
                       <div class="profile">
                         
-                        <div>Welcome Mr. BP</div>
+                        <div>Welcome {{full_name}}</div>
                         <div class="profile-img">
                           <img
                             src="{{ url_for('static', filename='assets/profile.jpg')}}"
@@ -70,7 +70,7 @@
           </div>
           <section class="bg-blue">
             <div class="main-container-job">
-              <h4>Welcome Back {BP Name}</h4>
+              <h4>Welcome Back {{full_name}}</h4>
             </div>
           </section>
           <section class="main-content-job">
@@ -101,73 +101,47 @@
                   </a>
                 </div>
                 <div class="page-content">
-                  <form class="sign-in-form mt-10">
+                  <form class="sign-in-form mt-10" action="{{ url_for('business_partner_bp.bp_post_vacancy') }}", method="post">
                     <div class="input-flex">
                       <div class="input-div">
                         <div class="input-div-tooltip">
-                          <input type="text" placeholder="Job Title" />
+                          <input type="text" name = "job_title" placeholder="Job Title" />
                         </div>
                       </div>
                       <div class="input-div">
                         <div class="input-div-tooltip">
-                          <input type="text" placeholder="Department" />
+                          <input type="text" name = "department" placeholder="Department" />
                         </div>
                       </div>
                     </div>
                     <div class="input-flex">
                       <div class="input-div">
                         <div class="input-div-tooltip">
-                          <input type="text" placeholder="Unit" />
+                          <input type="text" name = "unit" placeholder="Unit" />
                         </div>
                       </div>
                     </div>
                     <div class="input-flex">
                       <div class="input-div">
                         <div class="input-div-tooltip">
-                          <input type="text" placeholder="Line Manager" />
+                          <input type="text" name="line_manager" placeholder="Line Manager" />
                         </div>
                       </div>
                       <div class="input-div">
                         <div class="input-div-tooltip">
-                          <input type="number" placeholder="Number of openings" />
-                        </div>
-                      </div>
-                    </div>
-                    <div class="input-flex">
-                      <div class="input-div">
-                        <div class="input-div-tooltip">
-                          <input type="text" placeholder="Location" />
-                        </div>
-                      </div>
-                      <div class="input-div">
-                        <div class="input-div-tooltip">
-                          <input type="text" placeholder="Summary of Job description" />
+                          <input type="number" name="no_open_positions" placeholder="Number of openings" />
                         </div>
                       </div>
                     </div>
                     <div class="input-flex">
                       <div class="input-div">
                         <div class="input-div-tooltip">
-                          <input type="text" placeholder="Years of Experience" />
+                          <input type="text" name="location" placeholder="Location" />
                         </div>
                       </div>
                       <div class="input-div">
                         <div class="input-div-tooltip">
-                          <input type="text" placeholder="Salary Expectations" />
-                        </div>
-                      </div>
-                    </div>
-                    <div class="input-flex">
-                      <div class="input-div">
-                        <div class="input-div-tooltip">
-                          <input type="number" placeholder="Phone Number" />
-                        </div>
-                      </div>
-                    </div>
-                    <div class="input-flex">
-                      <div class="input-div">
-                        <div class="input-div-tooltip">
-                          <input type="text" placeholder="Other Relevant Information" />
+                          <input type="text" name="jd_summary" placeholder="Summary of Job description" />
                         </div>
                       </div>
                     </div>
@@ -179,13 +153,7 @@
                         </div>
                       </div>
                     </div>
-                    <div class="button-center">
-                      <div class="gradient-buttons">
-                        <div class="gradient-button-content">
-                          Make Requisition
-                        </div>
-                      </div>
-                    </div>
+                    <input type="submit" class="btn" value="Make requisition">
                   </form>
                 </div>
                 

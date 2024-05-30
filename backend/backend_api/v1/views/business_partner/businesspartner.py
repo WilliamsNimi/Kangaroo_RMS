@@ -6,7 +6,10 @@ from flask import g, redirect, make_response
 from backend_core import bp
 from backend_auth import bp_auth, session_auth
 from flask import Blueprint
+import bcrypt
 
+email_ = ""
+fullName = ""
 
 # Defining a blueprint
 business_partner_bp = Blueprint(
@@ -42,21 +45,21 @@ def bp_homepage():
     Home page of business partner
     jsonify({'success': True, 'message': 'Welcome Home Business Partner!'})
     """
-    return render_template("businesspartner/Home.html")
+    return render_template("businesspartner/Home.html", email=email_, full_name=fullName)
 
 @business_partner_bp.route('/bp/login', methods=['GET'], strict_slashes=False)
 def bp_login_get():
     """
     Business Partner login
-    """
+    
     session_token = request.cookies.get('session_token')
     
     if session_token:
         bp_details = session_auth.verify_session(session_token)
         if bp_details:
             setattr(g, bp_details[0], bp_details[1])
-            return redirect(url_for('business_partner_bp.bp_home'))
-    return redirect(url_for('business_partner_bp.bp_homepage'))
+            return redirect(url_for('business_partner_bp.bp_home'))"""
+    return render_template("businesspartner/SignIn.html")
 
 
 
@@ -64,7 +67,6 @@ def bp_login_get():
 def bp_login_post():
     """
     Business Partner login
-    """
     try:
         bp_dict = request.form.to_dict()
         if bp_dict:
@@ -85,7 +87,21 @@ def bp_login_post():
         return redirect(url_for('business_partner_bp.bp_login_get'))
     except Exception as error:
         print(error)
-        return redirect(url_for('business_partner_bp.bp_login_get'))
+        return redirect(url_for('business_partner_bp.bp_login_get'))"""
+
+    if request.method == 'POST' and 'email' in request.form and 'password' in request.form:
+        email = request.form['email']
+        password = request.form['password']
+        bp_= bp.find_business_partner(email)
+        global email_
+        global fullName
+        email_ = bp_.email
+        fullName = bp_.full_name
+        p_bytes = password.encode('utf-8')
+        hashed_password_val = bcrypt.checkpw(p_bytes, bp_.password)
+        if hashed_password_val and email == bp_.email:
+            return render_template("businesspartner/Home.html", email=email_, full_name=fullName)
+    return render_template("businesspartner/SignIn.html")
 
 
 @business_partner_bp.route('/bp/logout', methods=['POST'], strict_slashes=False)
@@ -107,7 +123,7 @@ def bp_create_requisition():
     """
     Returns template to create vacancy requisition
     """
-    return render_template('businesspartner/Requisition.html')
+    return render_template('businesspartner/Requisition.html', email=email_, full_name=fullName)
 
 
 @business_partner_bp.route('/bp/signup', methods=['GET'], strict_slashes=False)
@@ -136,7 +152,7 @@ def bp_creation():
         business_obj = bp.create_business_partner(email, full_name, password)
         
         if business_obj:
-            return redirect(url_for('kangaroo.bp_login_get'))
+            return render_template("businesspartner/SignIn.html")
         return jsonify({'success': False}), 500
     except Exception:
         return jsonify({'success': False, 'message': "BP with email {} already exists".format(email)}), 500
@@ -146,7 +162,7 @@ def bp_creation():
 def bp_post_vacancy():
     """
     Creates job to be posted if requisition-id exists
-    """
+    
     if not request.form.to_dict():
         abort(400)
     vacancy_details = request.form.to_dict()
@@ -159,14 +175,13 @@ def bp_post_vacancy():
     department = vacancy_details.get('department')
     unit = vacancy_details.get('unit')
     line_manager = vacancy_details.get('line_manager')
-    number_of_open_positions = vacancy_details.get('number_of_open_positions')
+    number_of_open_positions = vacancy_details.get('no_open_positions')
     location = vacancy_details.get('location')
-    job_description_summary = vacancy_details.get('job_description_summary')
-    recruiter_id = vacancy_details.get('recruiter_id') # Should we not be expecting a recruiter_id?
+    job_description_summary = vacancy_details.get('jd_summary')
     
     try:
         vacancy_created = bp.make_requisition(job_title, department, unit, line_manager, number_of_open_positions, 
-                                              location, job_description_summary, recruiter_id) 
+                                              location, job_description_summary) 
         if vacancy_created:
             del vacancy_created.__dict__["_sa_instance_state"]
             vacancy_created.__dict__['__class__'] = (str(type(vacancy_created)).split('.')[-1]).split('\'')[0]
@@ -174,7 +189,19 @@ def bp_post_vacancy():
             return jsonify({'success': True, 'vacancy': vacancy_created.__dict__}), 201
     except Exception as error:
         print(error)
-        return jsonify({'success': False}), 500
+        return jsonify({'success': False}), 500 """
+
+    if request.method == 'POST':
+        job_title = request.form['job_title']
+        department = request.form['department']
+        unit = request.form['unit']
+        line_manager = request.form['line_manager']
+        number_of_open_positions = request.form['no_open_positions']
+        location = request.form['location']
+        job_description_summary = request.form['jd_summary']
+        vacancy_created = bp.make_requisition(job_title, department, unit, line_manager, number_of_open_positions, location, job_description_summary)
+        return render_template("businesspartner/Home.html", job_title=vacancy_created.job_title, location=vacancy_created.location, number=vacancy_created.number_of_open_positions, status=vacancy_created.approval_status)
+    return render_template("businesspartner/SignIn.html")
 
 @business_partner_bp.route('/bp/profile/update', methods=['PUT'], strict_slashes=False)
 def bp_update_profile():

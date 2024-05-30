@@ -76,6 +76,17 @@ class Recruiter:
         except Exception:
             return False
     
+    def find_recruiter_by(self, email):
+        """
+        Find a recruiter obj based on email
+        """
+        try:
+            recruiter = backend_core.db.find_recruiter_by(email=email)
+            return recruiter
+        except Exception:
+            return False
+        return True
+
     def delete_recruiter(self, recruiter_id):
         """
         Deletes a recruiter obj from the db
