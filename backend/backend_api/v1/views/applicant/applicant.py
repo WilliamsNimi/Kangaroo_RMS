@@ -3,7 +3,11 @@ from flask import jsonify, abort, render_template, request, make_response
 from flask import g, url_for, redirect
 from backend_core import applicant
 from backend_auth import applicant_auth, session_auth
+import bcrypt
 
+email_ = ""
+firstName = ""
+lastName = ""
 
 # Defining a blueprint
 applicant_bp = Blueprint(
@@ -38,7 +42,7 @@ def applicant_profile():
     """
     Get Profile page of Applicant
     """
-    return render_template("applicant/Profile.html")
+    return render_template("applicant/Profile.html", email=email_, first_name=firstName, last_name=lastName)
 
 @applicant_bp.route('/applicant/forgot_password', methods=['GET'], strict_slashes=False)
 def applicant_forgot_password():
@@ -66,7 +70,7 @@ def applicant_login_get():
 def applicant_login_post():
     """
     Applicant login
-    """
+    
     try:
         applicant_dict = request.form.to_dict()
         if applicant_dict:
@@ -87,7 +91,22 @@ def applicant_login_post():
         return redirect(url_for('applicant_bp.applicant_login_get'))
     except Exception as error:
         print(error)
-        return redirect(url_for('applicant_bp.applicant_login_get'))
+        return redirect(url_for('applicant_bp.applicant_login_get')) """
+    if request.method == 'POST' and 'email' in request.form and 'password' in request.form:
+        email = request.form['email']
+        password = request.form['password']
+        applicant_= applicant.find_applicant(email)
+        global email_
+        global firstName
+        global lastName
+        email_ = applicant_.email
+        firstName = applicant_.first_name
+        lastName = applicant_.last_name
+        p_bytes = password.encode('utf-8')
+        hashed_password_val = bcrypt.checkpw(p_bytes, applicant_.password)
+        if hashed_password_val and email == applicant_.email:
+            return render_template("applicant/Home.html", email=email_, first_name=firstName, last_name=lastName)
+    return render_template("applicant/SignIn.html")
 
 
 @applicant_bp.route('/applicant/logout', methods=['POST'], strict_slashes=False)
@@ -140,7 +159,6 @@ def create_applicant_new():
         return jsonify({'success': False})
     except Exception:
         return jsonify({'success': False, 'message': 'user already exists'}), 409
-
 
 @applicant_bp.route('/applicant/profile/update', methods=['PUT'], strict_slashes=False)
 def applicant_update_profile():

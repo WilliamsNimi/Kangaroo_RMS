@@ -21,7 +21,7 @@
                   <ul class="nav-links">
                     <li class="emp tooltipfour" id="topnav">
                       <div class="profile">
-                        <div>Welcome Mr. Dumo</div>
+                        <div>Welcome {{first_name}}</div>
                         <div class="profile-img">
                           <img
                             src="{{ url_for('static', filename='assets/profile.jpg')}}"
@@ -72,7 +72,7 @@
           </div>
           <section class="bg-blue">
             <div class="main-container">
-              <h4>Welcome Back {Odumodu}</h4>
+              <h4>Welcome {{first_name}}</h4>
               <div class="search-container-users">
                 <div class="search-input">
                   <input type="text" placeholder="Search Vacancies..." />

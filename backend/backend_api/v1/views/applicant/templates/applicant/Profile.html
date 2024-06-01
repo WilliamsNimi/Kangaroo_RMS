@@ -22,7 +22,7 @@
                   <ul class="nav-links">
                     <li class="emp tooltipfour" id="topnav">
                       <div class="profile">
-                        <div>Welcome Mr. Applicant</div>
+                        <div>Welcome {{first_name}}</div>
                         <div class="profile-img">
                           <img
                             src="{{ url_for('static', filename='assets/profile.jpg')}}"
@@ -86,7 +86,7 @@
               <div class="left-page-profile">
                 <div class="left-page-content">
                   <div class="custom-bold left-page-profile-header">
-                    Blacksheep Odumodu
+                    {{first_name}} {{last_name}}
                   </div>
                   <div class="role mid-grey-norm">
                     Your Role:
@@ -99,7 +99,7 @@
                     <hr class="hr-1" />
                     <div>
                       <p class="left-page-field">Email</p>
-                      <p class="left-page-response mt-5">recruiter@recruitment.com</p>
+                      <p class="left-page-response mt-5">{{email}}</p>
                     </div>
                     <hr class="hr-2" />
                     <div class="left-page-password-field"></div>
@@ -111,19 +111,19 @@
                   <div class="input-flex">
                     <div class="input-div">
                       <div class="input-div-tooltip">
-                        <input type="text" placeholder="First Name" />
+                        <input type="text" placeholder="First Name" value={{first_name}}/>
                       </div>
                     </div>
                     <div class="input-div">
                       <div class="input-div-tooltip">
-                        <input type="text" placeholder="Last Name" />
+                        <input type="text" placeholder="Last Name" value={{last_name}}/>
                       </div>
                     </div>
                   </div>
                   <div class="input-flex">
                     <div class="input-div">
                       <div class="input-div-tooltip">
-                        <input type="email" placeholder="Email" />
+                        <input type="email" placeholder="email" value={{email}}/>
                       </div>
                     </div>
                     <div class="input-div">

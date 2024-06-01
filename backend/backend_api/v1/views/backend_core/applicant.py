@@ -62,3 +62,17 @@ class Applicant:
         except (InvalidRequestError, NoResultFound) as err:
             print("Application unsuccessful)")
             return False
+    
+    def find_applicant(self, email):
+        """
+        Uses method in db.py to check existence of applicant
+        """
+        if not email:
+            return False
+        try:
+            applicant = backend_core.db.find_applicant_by(email=email)
+            return applicant
+        except Exception as error:
+            print(error)
+            return False
+        return True
