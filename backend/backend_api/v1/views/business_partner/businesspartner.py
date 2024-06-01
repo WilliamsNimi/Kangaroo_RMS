@@ -134,30 +134,6 @@ def create_bp():
     return render_template('new_bp.html')
 
 
-@business_partner_bp.route('/bp/signup', methods=['POST'], strict_slashes=False)
-def bp_creation():
-    """
-    Creates new business partner OBJ
-    """
-    if not request.form.to_dict():
-        abort(400)
-    bp_details = request.form.to_dict()
-    email = bp_details.get('email')
-    full_name = bp_details.get('full_name')
-    password = bp_details.get('password')
-    
-    if not email or not full_name or not password:
-        abort(400)
-    try:
-        business_obj = bp.create_business_partner(email, full_name, password)
-        
-        if business_obj:
-            return render_template("businesspartner/SignIn.html")
-        return jsonify({'success': False}), 500
-    except Exception:
-        return jsonify({'success': False, 'message': "BP with email {} already exists".format(email)}), 500
-
-
 @business_partner_bp.route('/bp/requisitions', methods=['POST'], strict_slashes=False)
 def bp_post_vacancy():
     """

@@ -19,6 +19,17 @@ class Recruiter:
         except Exception:
             return backend_core.db.add_recruiter(email, full_name, password)
         raise ValueError("Recruiter with email {} already exists".format(email))
+    
+    def create_business_partner(self, email, full_name, password):
+        """ Adds a new business partner to the db
+        @email: the email of the business partner to be added
+        @full_name: the full name of the business partner to be added
+        Return: Returns the Business Partner Model object"""
+        try:
+            backend_core.db.find_business_partner_by(email=email)
+        except Exception:
+            return backend_core.db.add_business_partner(email, full_name, password)
+        raise ValueError("BP with email {} already exists".format(email))
 
     def update_profile(self, recruiter_id, **kwargs):
         """ Updating the recruiter profile

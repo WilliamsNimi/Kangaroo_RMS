@@ -110,6 +110,31 @@ def create_recruiter():
     """
     return render_template('recruiter/newRecruiter.html', full_name=fullName, email=email_)
 
+@recruiter_bp.route('/recruiter/newRecruiter', methods=['POST'], strict_slashes=False)
+def create_recruiter():
+    """
+    Sends form for recruiter creation
+    """
+    if not request.form.to_dict():
+        abort(400)
+    recruiter_details = request.form.to_dict()
+    email = recruiter_details.get('email')
+    full_name = recruiter_details.get('full_name')
+    password = recruiter_details.get('password')
+    
+    if not email or not password or not full_name:
+        abort(400)
+    try:
+        recruiterObj = recruiter.create_recruiter(email, full_name, password)
+        
+        if recruiterObj:
+            #Send email to new recruiter with email and password
+            return redirect(url_for('recruiter_bp.create_recruiter'))
+        return redirect(url_for('recruiter_bp.create_recruiter'))
+    except Exception as err:
+        print(err)
+        return jsonify({'success': False}), 409
+
 @recruiter_bp.route('/recruiter/newBP', methods=['GET'], strict_slashes=False)
 def create_BP():
     """
@@ -120,7 +145,7 @@ def create_BP():
 @recruiter_bp.route('/recruiter/profile', methods=['GET'], strict_slashes=False)
 def recruiter_profile():
     """
-    Sends form for BP creation
+    Displays recruiter's profile
     """
     return render_template('recruiter/Profile.html', full_name=fullName, email=email_)
 
@@ -229,3 +254,27 @@ def delete_vacancy(job_id):
     except Exception as error:
         print(error)
         return jsonify({'success': False}), 204
+
+@recruiter_bp.route('/recruiter/create_bp', methods=['POST'], strict_slashes=False)
+def bp_creation():
+    """
+    Creates new business partner OBJ
+    """
+    if not request.form.to_dict():
+        abort(400)
+    bp_details = request.form.to_dict()
+    email = bp_details.get('email')
+    full_name = bp_details.get('full_name')
+    password = bp_details.get('password')
+    
+    if not email or not full_name or not password:
+        abort(400)
+    try:
+        business_obj = bp.create_business_partner(email, full_name, password)
+        
+        if business_obj:
+            #send email to newly created business partner
+            return render_template('recruiter/newBP.html', full_name=fullName, email=email_)
+        return jsonify({'success': False}), 500
+    except Exception:
+        return jsonify({'success': False, 'message': "BP with email {} already exists".format(email)}), 500
