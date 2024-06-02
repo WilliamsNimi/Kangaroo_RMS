@@ -80,8 +80,7 @@ To run the project locally, follow these steps:
 
 ### Project partners:
 > **Nimi Williams**
-&nbsp;- Software Architect and Backend-Engineer
-<br>
+&nbsp;- Software Architect and Backend-Engineer<br>
 > **Joshua Bubune Agbeke**
 &nbsp;- Backend-Engineer
 
