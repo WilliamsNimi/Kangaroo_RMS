@@ -12,6 +12,7 @@ import bcrypt
 import uuid
 
 
+
 class DB:
     """DB class
     """
@@ -20,7 +21,8 @@ class DB:
         """Initialize a new DB instance
         """
         self._engine = create_engine("sqlite:///kangaroo.db")
-        # self._engine = create_engine('mysql+mysqldb://root:password@localhost/kangaroo')
+        #self._engine = create_engine('mysql://kangaroo:kangaroo@localhost/kangarooSQL')
+        #self._engine = create_engine('postgresql://kangaroo:kangaroo@localhost:5432/kangaroosql')
         Base.metadata.drop_all(self._engine)
         Base.metadata.create_all(self._engine)
         self.__session = None
@@ -44,7 +46,7 @@ class DB:
             applicant = Applicant(first_name = f_name, last_name = l_name, email = email, applicant_id = str(applicant_id), password = hashed_pwd)
             self._session.add(applicant)
             self._session.commit()
-            self._session.refresh(applicant)
+            #self._session.refresh(applicant)
             return applicant
         except (InvalidRequestError, NoResultFound) as err:
             self._session.rollback()
@@ -61,7 +63,7 @@ class DB:
             recruiter = Recruiter(full_name = full_name, email = email, recruiter_id = str(recruiter_id), password = hashed_pwd)
             self._session.add(recruiter)
             self._session.commit()
-            self._session.refresh(recruiter)
+            #self._session.refresh(recruiter)
             return recruiter
         except (InvalidRequestError, NoResultFound) as err:
             self._session.rollback()
@@ -81,7 +83,7 @@ class DB:
 
             self._session.add(vacancy)
             self._session.commit()
-            self._session.refresh(vacancy)
+            #self._session.refresh(vacancy)
             return vacancy
         except (InvalidRequestError, NoResultFound) as err:
             self._session.rollback()
@@ -209,7 +211,7 @@ class DB:
             application = ApplicantsVacancy(applicant_id = applicant_id, job_id = job_id)
             self._session.add(application)
             self._session.commit()
-            self._session.refresh(application)
+            #self._session.refresh(application)
             print("You have a new application")
             return application
         except (InvalidRequestError, NoResultFound) as err:

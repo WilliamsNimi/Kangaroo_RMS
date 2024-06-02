@@ -102,6 +102,7 @@ def applicant_login_post():
         email_ = applicant_.email
         firstName = applicant_.first_name
         lastName = applicant_.last_name
+        print(applicant_.password)
         p_bytes = password.encode('utf-8')
         hashed_password_val = bcrypt.checkpw(p_bytes, applicant_.password)
         if hashed_password_val and email == applicant_.email:

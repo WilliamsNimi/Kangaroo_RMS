@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
 """ SQL Alchemy user model """
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy import Column, Integer, String, DateTime, BLOB
+from sqlalchemy import Column, Integer, String, DateTime, LargeBinary
 Base = declarative_base()
+
 
 
 class Applicant(Base):
@@ -19,8 +20,8 @@ class Applicant(Base):
     years_of_experience = Column(String(250))
     salary_expectation = Column(Integer)
     other_relevant_information = Column(String(250))
-    image = Column(BLOB)
-    resume = Column(BLOB)
+    image = Column(LargeBinary)
+    resume = Column(LargeBinary)
     applicant_id = Column(String(250), primary_key=True)
     email = Column(String(250))
     password = Column(String(250))
@@ -50,7 +51,7 @@ class Vacancy(Base):
     date_of_requisition = Column(DateTime)
     business_partner = Column(String(250))
     location = Column(String(250))
-    job_description = Column(BLOB)
+    job_description = Column(LargeBinary)
     job_description_summary = Column(String(250))
     recruiter_id = Column(String(250))
     requisition_id = Column(String(250))

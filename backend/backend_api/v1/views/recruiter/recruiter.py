@@ -1,7 +1,7 @@
 """
 API endpoint for recruiters
 """
-from flask import request, abort, jsonify, g, redirect, url_for
+from flask import request, abort, jsonify, g, redirect, url_for, flash
 from flask import render_template, make_response
 from backend_core import recruiter
 from backend_auth import recruiter_auth, session_auth
@@ -110,8 +110,8 @@ def create_recruiter():
     """
     return render_template('recruiter/newRecruiter.html', full_name=fullName, email=email_)
 
-@recruiter_bp.route('/recruiter/newRecruiter', methods=['POST'], strict_slashes=False)
-def create_recruiter():
+@recruiter_bp.route('/recruiter/create_recruiter', methods=['POST'], strict_slashes=False)
+def create_new_recruiter():
     """
     Sends form for recruiter creation
     """
@@ -270,7 +270,7 @@ def bp_creation():
     if not email or not full_name or not password:
         abort(400)
     try:
-        business_obj = bp.create_business_partner(email, full_name, password)
+        business_obj = recruiter.create_business_partner(email, full_name, password)
         
         if business_obj:
             #send email to newly created business partner
