@@ -115,6 +115,7 @@ def create_new_recruiter():
     """
     Sends form for recruiter creation
     """
+    print(request.form)
     if not request.form.to_dict():
         abort(400)
     recruiter_details = request.form.to_dict()
@@ -260,6 +261,7 @@ def bp_creation():
     """
     Creates new business partner OBJ
     """
+    print(request.form)
     if not request.form.to_dict():
         abort(400)
     bp_details = request.form.to_dict()

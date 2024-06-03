@@ -23,7 +23,7 @@ class DB:
         self._engine = create_engine("sqlite:///kangaroo.db")
         #self._engine = create_engine('mysql://kangaroo:kangaroo@localhost/kangarooSQL')
         #self._engine = create_engine('postgresql://kangaroo:kangaroo@localhost:5432/kangaroosql')
-        Base.metadata.drop_all(self._engine)
+        #Base.metadata.drop_all(self._engine)
         Base.metadata.create_all(self._engine)
         self.__session = None
 
