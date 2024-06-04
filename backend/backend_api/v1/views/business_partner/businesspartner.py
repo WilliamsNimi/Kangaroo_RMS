@@ -175,8 +175,8 @@ def bp_post_vacancy():
         number_of_open_positions = request.form['no_open_positions']
         location = request.form['location']
         job_description_summary = request.form['jd_summary']
-        vacancy_created = bp.make_requisition(job_title, department, unit, line_manager, number_of_open_positions, location, job_description_summary)
-        return render_template("businesspartner/Home.html", job_title=vacancy_created.job_title, location=vacancy_created.location, number=vacancy_created.number_of_open_positions, status=vacancy_created.approval_status)
+        bp.make_requisition(job_title, department, unit, line_manager, number_of_open_positions, location, job_description_summary)
+        return redirect(url_for("business_partner_bp.bp_homepage"))
     return render_template("businesspartner/SignIn.html")
 
 @business_partner_bp.route('/bp/profile/update', methods=['PUT'], strict_slashes=False)

@@ -76,3 +76,7 @@ class Applicant:
             print(error)
             return False
         return True
+    
+    def show_all_vacancies(self):
+        """ Retrieve all vacancies"""
+        return backend_core.db.show_all_vacancies()
