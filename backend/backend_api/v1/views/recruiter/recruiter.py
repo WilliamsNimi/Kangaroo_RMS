@@ -32,7 +32,8 @@ def recruiter_homepage():
     TODO: Build a solid redirect
     Home page of recruiter
     """
-    return render_template("recruiter/Home.html", full_name=fullName, email=email_)
+    jobs = recruiter.show_all_vacancies()
+    return render_template("recruiter/Home.html", full_name=fullName, email=email_, jobs=jobs)
 
 
 @recruiter_bp.route('/recruiter/login', methods=['GET'], strict_slashes=False)
@@ -86,7 +87,7 @@ def recruiter_login_post():
         p_bytes = password.encode('utf-8')
         hashed_password_val = bcrypt.checkpw(p_bytes, recruiter_.password)
         if hashed_password_val and email == recruiter_.email:
-            return render_template("recruiter/Home.html", full_name=recruiter_.full_name, email=recruiter_.email)
+            return redirect(url_for("recruiter_bp.recruiter_homepage", full_name=recruiter_.full_name, email=recruiter_.email))
     return render_template("recruiter/SignIn.html")
 
 @recruiter_bp.route('/recruiter/logout', methods=['GET', 'POST'], strict_slashes=False)

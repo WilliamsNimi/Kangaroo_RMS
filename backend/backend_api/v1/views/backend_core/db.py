@@ -318,7 +318,7 @@ class DB:
         vacancy_list = []
         vacancies = self._session.query(Vacancy).all()
         for vacancy in vacancies:
-            vacancy_list.append(vacancy.job_id)
+            vacancy_list.append((vacancy.job_title, vacancy.number_of_open_positions, vacancy.location, vacancy.approval_status))
         return vacancy_list
 
     def show_all_recruiters(self):

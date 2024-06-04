@@ -109,72 +109,19 @@
                   </a>
                 </div>
                 <div class="page-content">
+                  {%for job in jobs%}
                   <div class="job-card-flex">
                     <div>
-                      <div class="job-title">Job Title: <span>{{job_title}}</span></div>
-                      <div class="job-title">Approval Status: <span>{{status}}</span></div>
-                      <div class="job-title">Location: <span>{{location}}</span></div>
+                      <div class="job-title">Job Title: <span>{{job[0]}}</span></div>
+                      <div class="job-title">Approval Status: <span>{{job[3]}}</span></div>
+                      <div class="job-title">Location: <span>{{job[2]}}</span></div>
                     </div>
                     <div>
                       <div class="job-title">Number of Applicants: <span></span></div>
-                      <div class="job-title">Number of Open Positions: <span>{{number}}</span></div>
+                      <div class="job-title">Number of Open Positions: <span>{{job[1]}}</span></div>
                     </div>
                   </div>
-                  <div class="job-card-flex">
-                    <div>
-                      <div class="job-title">Job Title: <span>Technical Recruiter</span></div>
-                      <div class="job-title">Approval Status: <span>Approved</span></div>
-                      <div class="job-title">Location: <span>Lagos</span></div>
-                    </div>
-                    <div>
-                      <div class="job-title">Number of Applicants: <span>45</span></div>
-                      <div class="job-title">Number of Open Positions: <span>3</span></div>
-                    </div>
-                  </div>
-                  <div class="job-card-flex">
-                    <div>
-                      <div class="job-title">Job Title: <span>Technical Recruiter</span></div>
-                      <div class="job-title">Approval Status: <span>Approved</span></div>
-                      <div class="job-title">Location: <span>Lagos</span></div>
-                    </div>
-                    <div>
-                      <div class="job-title">Number of Applicants: <span>45</span></div>
-                      <div class="job-title">Number of Open Positions: <span>3</span></div>
-                    </div>
-                  </div>
-                  <div class="job-card-flex">
-                    <div>
-                      <div class="job-title">Job Title: <span>Technical Recruiter</span></div>
-                      <div class="job-title">Approval Status: <span>Approved</span></div>
-                      <div class="job-title">Location: <span>Lagos</span></div>
-                    </div>
-                    <div>
-                      <div class="job-title">Number of Applicants: <span>45</span></div>
-                      <div class="job-title">Number of Open Positions: <span>3</span></div>
-                    </div>
-                  </div>
-                  <div class="job-card-flex">
-                    <div>
-                      <div class="job-title">Job Title: <span>Technical Recruiter</span></div>
-                      <div class="job-title">Approval Status: <span>Approved</span></div>
-                      <div class="job-title">Location: <span>Lagos</span></div>
-                    </div>
-                    <div>
-                      <div class="job-title">Number of Applicants: <span>45</span></div>
-                      <div class="job-title">Number of Open Positions: <span>3</span></div>
-                    </div>
-                  </div>
-                  <div class="job-card-flex">
-                    <div>
-                      <div class="job-title">Job Title: <span>Technical Recruiter</span></div>
-                      <div class="job-title">Approval Status: <span>Approved</span></div>
-                      <div class="job-title">Location: <span>Lagos</span></div>
-                    </div>
-                    <div>
-                      <div class="job-title">Number of Applicants: <span>45</span></div>
-                      <div class="job-title">Number of Open Positions: <span>3</span></div>
-                    </div>
-                  </div>
+                  {%endfor%} 
                   <div class="data-table-pagination">
                     <div class="gradient-buttons">
                       <div class="gradient-button-content">

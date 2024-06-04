@@ -43,9 +43,9 @@ def bp_profile():
 def bp_homepage():
     """
     Home page of business partner
-    jsonify({'success': True, 'message': 'Welcome Home Business Partner!'})
     """
-    return render_template("businesspartner/Home.html", email=email_, full_name=fullName)
+    jobs = bp.show_all_vacancies()
+    return render_template("businesspartner/Home.html", email=email_, full_name=fullName, jobs=jobs)
 
 @business_partner_bp.route('/bp/login', methods=['GET'], strict_slashes=False)
 def bp_login_get():
@@ -100,7 +100,7 @@ def bp_login_post():
         p_bytes = password.encode('utf-8')
         hashed_password_val = bcrypt.checkpw(p_bytes, bp_.password)
         if hashed_password_val and email == bp_.email:
-            return render_template("businesspartner/Home.html", email=email_, full_name=fullName)
+            return redirect(url_for("business_partner_bp.bp_homepage", email=email_, full_name=fullName))
     return render_template("businesspartner/SignIn.html")
 
 

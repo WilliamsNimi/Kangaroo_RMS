@@ -76,6 +76,10 @@ class BusinessPartner:
         except Exception:
             return False
 
+    def show_all_vacancies(self):
+        """ Retrieve all vacancies"""
+        return backend_core.db.show_all_vacancies()
+
 
     
     
