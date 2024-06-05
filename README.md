@@ -1,5 +1,5 @@
  # Kangaroo Recruitment Management System - RMS
- #### PYTHON | FLASK | MySQL | HTML | CSS | JINJA2 | REDIS | JAVASCRIPT
+ #### PYTHON | FLASK | PostGreSQL | HTML | CSS | JINJA2 | REDIS | JAVASCRIPT
 <br>
 
 ### **Home Page of Recruiter**
@@ -30,46 +30,46 @@ To run the project locally, follow these steps:
 <br>
 
 # API Endpoints
-### `/kangaroo/v1/applicant/*`  ===  `/kangaroo/v1/recruiter/*`  ===  `/kangaroo/v1/bp/*`
+### `/applicant/*`  ===  `/recruiter/*`  ===  `/bp/*`
 
 ## Main Home Page
 - **Endpoint**: `/`
 - **Description**: This is the main home page of the recruitment management system.
 
 ## Applicant Home Page
-- **Endpoint**: `/kangaroo/v1/applicant/homepage`
+- **Endpoint**: `/applicant/homepage`
 - **Description**: This is the home page for applicants where they can see an overview of their profile.
 
 ## List Published Jobs
-- **Endpoint**: `/kangaroo/v1/jobs`
+- **Endpoint**: `/applicant/jobs`
 - **Description**: This endpoint lists all the current published jobs available for applicants to view and apply to.
 
 ## Applicant Profile
-- **Endpoint**: `/kangaroo/v1/applicant/profile`
+- **Endpoint**: `/applicant/profile`
 - **Description**: This endpoint displays the profile of the applicant, including some personal information.
 
 ## Forgot Password
-- **Endpoint**: `/kangaroo/v1/applicant/forgot_password`
+- **Endpoint**: `/applicant/forgot_password`
 - **Description**: This endpoint allows applicants to initiate the process to recover their forgotten password.
 
 ## Applicant Login
-- **Endpoint**: `/kangaroo/v1/applicant/login`
+- **Endpoint**: `/applicant/login`
 - **Description**: This is the login endpoint for applicants to access their accounts.
 
 ## Applicant Logout
-- **Endpoint**: `/kangaroo/v1/applicant/logout`
+- **Endpoint**: `/applicant/logout`
 - **Description**: This endpoint allows applicants to log out of their accounts.
 
 ## Applicant Signup
-- **Endpoint**: `/kangaroo/v1/applicant/signup`
+- **Endpoint**: `/applicant/signup`
 - **Description**: This is the signup endpoint for new applicants to create an account.
 
 ## Update Applicant Profile
-- **Endpoint**: `/kangaroo/v1/applicant/profile/update`
+- **Endpoint**: `/applicant/profile/update`
 - **Description**: This endpoint allows applicants to update their profile information.
 
 ## Apply to a Job
-- **Endpoint**: `/kangaroo/v1/applicant/apply`
+- **Endpoint**: `/applicant/apply`
 - **Description**: This endpoint allows applicants to apply to a job listed on the platform.
 
 
