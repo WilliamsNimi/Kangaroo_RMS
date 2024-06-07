@@ -120,6 +120,7 @@
                 </div>
                 <div class="page-content">
                   <form class="sign-in-form mt-10" style="width: 50%" action="{{ url_for('recruiter_bp.bp_creation') }}" method="post">
+                    <p style="color:rgb(235, 9, 20);" class="message">{{message}}</p>
                     <div class="input-div" style="width: calc(75% + 43px)">
                       <div class="input-div-tooltip">
                         <input type="text" name="full_name" placeholder="Full Name" />

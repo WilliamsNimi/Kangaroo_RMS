@@ -10,6 +10,7 @@ import bcrypt
 
 email_ = ""
 fullName = ""
+message = ""
 
 # Defining a blueprint
 recruiter_bp = Blueprint(
@@ -113,7 +114,7 @@ def create_recruiter():
     """
     Sends form for recruiter creation
     """
-    return render_template('recruiter/newRecruiter.html', full_name=fullName, email=email_)
+    return render_template('recruiter/newRecruiter.html', full_name=fullName, email=email_, message=message)
 
 @recruiter_bp.route('/recruiter/create_recruiter', methods=['POST'], strict_slashes=False)
 def create_new_recruiter():
@@ -127,6 +128,7 @@ def create_new_recruiter():
     email = recruiter_details.get('email')
     full_name = recruiter_details.get('full_name')
     password = recruiter_details.get('password')
+    global message
     
     if not email or not password or not full_name:
         abort(400)
@@ -134,12 +136,14 @@ def create_new_recruiter():
         recruiterObj = recruiter.create_recruiter(email, full_name, password)
         
         if recruiterObj:
+            message = "New Recruiter created"
             #Send email to new recruiter with email and password
-            return redirect(url_for('recruiter_bp.create_recruiter'))
-        return redirect(url_for('recruiter_bp.create_recruiter'))
+            return redirect(url_for('recruiter_bp.create_recruiter', message=message))
+        return jsonify({'success': False}), 500
     except Exception as err:
+        message = "Recruiter with email "+ email + " already exists."
         print(err)
-        return jsonify({'success': False}), 409
+        return redirect(url_for('recruiter_bp.create_recruiter', message=message))
 
 @recruiter_bp.route('/recruiter/newBP', methods=['GET'], strict_slashes=False)
 def create_BP():
@@ -280,8 +284,10 @@ def bp_creation():
         business_obj = recruiter.create_business_partner(email, full_name, password)
         
         if business_obj:
+            message = "New Business Partner created"
             #send email to newly created business partner
-            return render_template('recruiter/newBP.html', full_name=fullName, email=email_)
+            return render_template('recruiter/newBP.html', full_name=fullName, email=email_, message=message)
         return jsonify({'success': False}), 500
     except Exception:
-        return jsonify({'success': False, 'message': "BP with email {} already exists".format(email)}), 500
+        message = "Business Partner with " + email + " already exists."
+        return render_template('recruiter/newBP.html', full_name=fullName, email=email_, message=message)
