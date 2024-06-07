@@ -99,15 +99,18 @@ def applicant_login_post():
         global email_
         global firstName
         global lastName
-        email_ = applicant_.email
-        firstName = applicant_.first_name
-        lastName = applicant_.last_name
-        print(applicant_.password)
-        p_bytes = password.encode('utf-8')
-        hashed_password_val = bcrypt.checkpw(p_bytes, applicant_.password)
-        if hashed_password_val and email == applicant_.email:
-            return render_template("applicant/Home.html", email=email_, first_name=firstName, last_name=lastName)
-    return render_template("applicant/SignIn.html")
+        try:
+            email_ = applicant_.email
+            firstName = applicant_.first_name
+            lastName = applicant_.last_name
+            print(applicant_.password)
+            p_bytes = password.encode('utf-8')
+            hashed_password_val = bcrypt.checkpw(p_bytes, applicant_.password)
+            if hashed_password_val and email == applicant_.email:
+                return render_template("applicant/Home.html", email=email_, first_name=firstName, last_name=lastName)
+        except Exception:
+            error_message =  "Username or Password incorrect"
+    return render_template("applicant/SignIn.html", error_message=error_message)
 
 
 @applicant_bp.route('/applicant/logout', methods=['POST'], strict_slashes=False)

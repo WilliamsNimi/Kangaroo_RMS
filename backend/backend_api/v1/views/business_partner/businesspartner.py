@@ -95,13 +95,16 @@ def bp_login_post():
         bp_= bp.find_business_partner(email)
         global email_
         global fullName
-        email_ = bp_.email
-        fullName = bp_.full_name
-        p_bytes = password.encode('utf-8')
-        hashed_password_val = bcrypt.checkpw(p_bytes, bp_.password)
-        if hashed_password_val and email == bp_.email:
-            return redirect(url_for("business_partner_bp.bp_homepage", email=email_, full_name=fullName))
-    return render_template("businesspartner/SignIn.html")
+        try:
+            email_ = bp_.email
+            fullName = bp_.full_name
+            p_bytes = password.encode('utf-8')
+            hashed_password_val = bcrypt.checkpw(p_bytes, bp_.password)
+            if hashed_password_val and email == bp_.email:
+                return redirect(url_for("business_partner_bp.bp_homepage", email=email_, full_name=fullName))
+        except Exception:
+            error_message =  "Username or Password incorrect"
+    return render_template("businesspartner/SignIn.html", error_message=error_message)
 
 
 @business_partner_bp.route('/bp/logout', methods=['POST'], strict_slashes=False)

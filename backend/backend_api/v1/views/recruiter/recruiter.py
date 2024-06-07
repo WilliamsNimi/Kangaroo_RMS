@@ -76,19 +76,23 @@ def recruiter_login_post():
     except Exception as error:
         print(error)
         return redirect(url_for('recruiter_bp.recruiter_login_get')) """
+    
     if request.method == 'POST' and 'email' in request.form and 'password' in request.form:
         email = request.form['email']
         password = request.form['password']
         recruiter_= recruiter.find_recruiter_by(email)
         global email_
         global fullName
-        email_ = recruiter_.email
-        fullName = recruiter_.full_name
-        p_bytes = password.encode('utf-8')
-        hashed_password_val = bcrypt.checkpw(p_bytes, recruiter_.password)
-        if hashed_password_val and email == recruiter_.email:
-            return redirect(url_for("recruiter_bp.recruiter_homepage", full_name=recruiter_.full_name, email=recruiter_.email))
-    return render_template("recruiter/SignIn.html")
+        try:
+            email_ = recruiter_.email
+            fullName = recruiter_.full_name
+            p_bytes = password.encode('utf-8')
+            hashed_password_val = bcrypt.checkpw(p_bytes, recruiter_.password)
+            if hashed_password_val and email == recruiter_.email:
+                return redirect(url_for("recruiter_bp.recruiter_homepage", full_name=recruiter_.full_name, email=recruiter_.email))
+        except Exception:
+            error_message =  "Username or Password incorrect"
+    return render_template("recruiter/SignIn.html", error_message=error_message)
 
 @recruiter_bp.route('/recruiter/logout', methods=['GET', 'POST'], strict_slashes=False)
 def recruiter_logout():
