@@ -7,3 +7,4 @@ MarkupSafe==2.1.1
 Werkzeug==3.0.3
 SQLAlchemy==2.0.26
 bcrypt==4.1.2
+redis==5.0.4
