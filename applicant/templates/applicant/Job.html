@@ -1,0 +1,206 @@
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <title>Home</title>
+  </head>
+  <body>
+    <div id="overlay" class="overlay"></div>
+    <!-- Add this line for overlay -->
+    <div class="stop-scroll" id="disable-scroll">
+      <div class="content-cont">
+        <div>
+          <div class="test">
+            <header class="nav">
+              <div class="nav-container">
+                <div class="nav-logo">
+                  <img src="{{ url_for('static', filename='assets/logoipsum-280.svg')}}" alt="" />
+                </div>
+                <div>
+                  <ul class="nav-links">
+                    <li class="emp tooltipfour" id="topnav">
+                      <div class="profile">
+                        <div>Welcome {{first_name}}</div>
+                        <div class="profile-img">
+                          <img
+                            src="{{ url_for('static', filename='assets/profile.jpg')}}"
+                            alt="pictue of a beautiful dog in red bandana"
+                          />
+                        </div>
+                        <img
+                          src="{{ url_for('static', filename='assets/Arrow - Down.svg')}}"
+                          alt="arrow down"
+                        />
+                        <span class="tooltiptext" id="tooltiptext">
+                          <a href="{{ url_for('applicant_bp.applicant_profile') }}">
+                            <div class="space-btw mb-5 profile-hover">
+                              <div>
+                                <span class="tip-header">Profile</span>
+                                <p class="tip-header-desc">
+                                  View Account Information
+                                </p>
+                              </div>
+                              <img
+                                src="{{ url_for('static', filename='assets/Arrow - Bottom - Right.svg')}}"
+                                alt=""
+                              />
+                            </div>
+                          </a>
+                          <a href="{{ url_for('applicant_bp.applicant_logout') }}">
+                            <div class="space-btw profile-hover">
+                              <div>
+                                <span class="tip-header">Sign Out</span>
+                                <p class="tip-header-desc">
+                                  Requires you to sign in again next time
+                                </p>
+                              </div>
+                              <img
+                                src="{{ url_for('static', filename='assets/Arrow - Bottom - Right.svg')}}"
+                                alt=""
+                              />
+                            </div>
+                          </a>
+                        </span>
+                      </div>
+                      <!-- <div class="link-container" style="margin-top: 6px"></div> -->
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </header>
+          </div>
+          <section class="bg-blue">
+            <div class="main-container-job">
+              <h4>Welcome Back {Odumodu}</h4>
+            </div>
+          </section>
+          <section class="main-content-job">
+            <div class="main-content-container">
+              <div class="page-nav-content-applicant">
+                <div class="page-content">
+                  <div class="job-flex">
+                    <div>
+                      <div class="job-title">
+                        Job Title: <span>Technical Recruiter</span>
+                      </div>
+                      <div class="job-title">
+                        Approval Status: <span>Approved</span>
+                      </div>
+                      <div class="job-title">Location: <span>Lagos</span></div>
+                    </div>
+                    <div class="button-center">
+                      <div class="gradient-buttons btn-sdw">
+                          <div class="gradient-button-content">
+                              Apply
+                          </div>
+                      </div>
+                  </div>
+                  </div>
+
+                  <div class="job-title mt-20">Job Summary</div>
+                  <div class="job-description">
+                    Lorem ipsum dolor sit amet consectetur, adipisicing elit.
+                    Libero, itaque ad inventore dolor quo voluptatum rem,
+                    corrupti aperiam dolorem consequuntur at quisquam, repellat
+                    vero rerum quae quis quaerat vitae molestias. Lorem ipsum
+                    dolor sit amet consectetur adipisicing elit. Maiores
+                    laudantium ex cumque similique voluptatem optio, odit,
+                    veniam delectus harum amet voluptatum iste itaque
+                    perferendis unde eaque enim alias aperiam non. Officiis modi
+                    autem amet blanditiis eum veritatis recusandae iure expedita
+                    consectetur, qui possimus obcaecati quas fugiat magni dicta
+                    corrupti cum, mollitia harum natus impedit ullam. Doloribus
+                    molestiae natus unde quaerat? Assumenda nostrum harum,
+                    itaque dolore sunt pariatur, officia eveniet veritatis optio
+                    iure alias totam, velit animi. Dignissimos numquam sed rem
+                    aliquid sequi sapiente illo vel, amet laborum perspiciatis
+                    eligendi minima. Aspernatur pariatur consectetur sequi et
+                    quae, ullam labore fuga vitae? Accusantium odit, delectus
+                    mollitia officia voluptate deserunt, harum quo beatae,
+                    tempora vel eos excepturi laudantium ipsa quidem optio ab!
+                    Autem!
+                  </div>
+                  <div class="job-title mt-20">Responsibilities</div>
+                  <div class="job-description">
+                    Lorem ipsum dolor sit amet consectetur, adipisicing elit.
+                    Libero, itaque ad inventore dolor quo voluptatum rem,
+                    corrupti aperiam dolorem consequuntur at quisquam, repellat
+                    vero rerum quae quis quaerat vitae molestias. Lorem ipsum
+                    dolor sit amet consectetur adipisicing elit. Maiores
+                    laudantium ex cumque similique voluptatem optio, odit,
+                    veniam delectus harum amet voluptatum iste itaque
+                    perferendis unde eaque enim alias aperiam non. Officiis modi
+                    autem amet blanditiis eum veritatis recusandae iure expedita
+                    consectetur, qui possimus obcaecati quas fugiat magni dicta
+                    corrupti cum, mollitia harum natus impedit ullam. Doloribus
+                    molestiae natus unde quaerat? Assumenda nostrum harum,
+                    itaque dolore sunt pariatur, officia eveniet veritatis optio
+                    iure alias totam, velit animi. Dignissimos numquam sed rem
+                    aliquid sequi sapiente illo vel, amet laborum perspiciatis
+                    eligendi minima. Aspernatur pariatur consectetur sequi et
+                    quae, ullam labore fuga vitae? Accusantium odit, delectus
+                    mollitia officia voluptate deserunt, harum quo beatae,
+                    tempora vel eos excepturi laudantium ipsa quidem optio ab!
+                    Autem!
+                  </div>
+                  <div class="job-title mt-20">Requirements</div>
+                  <div class="job-description mb-5">
+                    Lorem ipsum dolor sit amet consectetur, adipisicing elit.
+                    Libero, itaque ad inventore dolor quo voluptatum rem,
+                    corrupti aperiam dolorem consequuntur at quisquam, repellat
+                    vero rerum quae quis quaerat vitae molestias. Lorem ipsum
+                    dolor sit amet consectetur adipisicing elit. Maiores
+                    laudantium ex cumque similique voluptatem optio, odit,
+                    veniam delectus harum amet voluptatum iste itaque
+                    perferendis unde eaque enim alias aperiam non. Officiis modi
+                    autem amet blanditiis eum veritatis recusandae iure expedita
+                    consectetur, qui possimus obcaecati quas fugiat magni dicta
+                    corrupti cum, mollitia harum natus impedit ullam. Doloribus
+                    molestiae natus unde quaerat? Assumenda nostrum harum,
+                    itaque dolore sunt pariatur, officia eveniet veritatis optio
+                    iure alias totam, velit animi. Dignissimos numquam sed rem
+                    aliquid sequi sapiente illo vel, amet laborum perspiciatis
+                    eligendi minima. Aspernatur pariatur consectetur sequi et
+                    quae, ullam labore fuga vitae? Accusantium odit, delectus
+                    mollitia officia voluptate deserunt, harum quo beatae,
+                    tempora vel eos excepturi laudantium ipsa quidem optio ab!
+                    Autem!
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+          <div id="mySidepanel" class="sidepanel">
+            <div class="back">
+              <img src="{{ url_for('static', filename='assets/Arrow - Left.svg')}}" alt="back arrow" />
+              <div onclick="closeNav()" class="back-text">Back</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <footer class="footer">
+        <div class="footer-rights">© 2024 All rights reserved</div>
+        <div class="footer-project">Kangaroo</div>
+      </footer>
+    </div>
+    <script>
+      function openNav() {
+        document.getElementById("mySidepanel").style.width = "450px";
+        // document.getElementById("mySidepanel").classList.add("opened");
+        document.getElementById("overlay").style.display = "block";
+        document.getElementById("disable-scroll").style.overflowY = "hidden"; // Add class to indicate sidepanel is open
+      }
+
+      function openTooltip() {
+        document.getElementById("tooltiptext").style.visibility = "visible";
+      }
+
+      function closeNav() {
+        document.getElementById("mySidepanel").style.width = "0";
+        // document.getElementById("mySidepanel").classList.remove("opened");
+        document.getElementById("overlay").style.display = "none"; // Remove class to indicate sidepanel is closed
+      }
+    </script>
+  </body>
+</html>
