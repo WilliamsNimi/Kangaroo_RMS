@@ -25,7 +25,7 @@ def recruiter_home():
     Home page of recruiter
     jsonify({'success': True, 'message': 'Welcome Home RECRUITER!'})
     """
-    return render_template("recruiter/Signup.html")
+    return render_template("recruiter/Signup.html", message=message)
 
 @recruiter_bp.route('/recruiter/homepage', methods=['GET'], strict_slashes=False)
 def recruiter_homepage():
@@ -165,15 +165,18 @@ def add_recruiter():
     """
     Adds a recruiter to the db
     """
+    global message
     if not request.form.to_dict():
-        abort(400)
+        message = "Please fill the details in the form"
+        return redirect(url_for('recruiter_bp.recruiter_home', message=message))
     recruiter_details = request.form.to_dict()
     email = recruiter_details.get('email')
     full_name = recruiter_details.get('full_name')
     password = recruiter_details.get('password')
     
     if not email or not password or not full_name:
-        abort(400)
+        message = "Please fill the details in the form"
+        return redirect(url_for('recruiter_bp.recruiter_home', message=message))
     try:
         recruiterObj = recruiter.create_recruiter(email, full_name, password)
         
@@ -181,8 +184,8 @@ def add_recruiter():
             return redirect(url_for('recruiter_bp.recruiter_login_get'))
         return redirect(url_for('recruiter_bp.recruiter_login_get'))
     except Exception as err:
-        print(err)
-        return jsonify({'success': False}), 409
+        message = "Error Submitting form. Please try again."
+        return redirect(url_for('recruiter_bp.recruiter_home', message=message))
     
 @recruiter_bp.route('/recruiter/forgot_password', methods=['GET'], strict_slashes=False)
 def recruiter_forgot_password():

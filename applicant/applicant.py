@@ -8,6 +8,7 @@ import bcrypt
 email_ = ""
 firstName = ""
 lastName = ""
+message = ""
 
 # Defining a blueprint
 applicant_bp = Blueprint(
@@ -21,7 +22,7 @@ def applicant_home():
     """
     Signup page of applicant
     """
-    return render_template("applicant/Signup.html")
+    return render_template("applicant/Signup.html", message=message)
 
 @applicant_bp.route('/applicant/homepage', methods=['GET'], strict_slashes=False)
 def applicant_homepage():
@@ -144,8 +145,10 @@ def create_applicant_new():
     """
     Creates new applicant
     """
+    global message
     if not request.form.to_dict():
-        abort(400)
+        message = "Please fill the details in the form"
+        return redirect(url_for('applicant_bp.applicant_home', message=message))
 
     applicant_details = request.form.to_dict()
     f_name = applicant_details.get('first_name')
@@ -154,7 +157,8 @@ def create_applicant_new():
     password = applicant_details.get('password')
 
     if not f_name or not l_name or not email or not password:
-        abort(400)
+        message = "Please fill the details in the form"
+        return redirect(url_for('applicant_bp.applicant_home', message=message))
     try:
         applicantObj = applicant.create_applicant(f_name, l_name, email, password)
         
@@ -162,8 +166,8 @@ def create_applicant_new():
             return redirect(url_for('applicant_bp.applicant_login_get'))
         return jsonify({'success': False})
     except Exception as e:
-        print(e)
-        return jsonify({'success': False, 'message': 'user already exists'}), 409
+        message = "Applicant with " + email + " already exists. Please click on forgot password."
+        return redirect(url_for('applicant_bp.applicant_home', message=message))
 
 @applicant_bp.route('/applicant/profile/update', methods=['PUT'], strict_slashes=False)
 def applicant_update_profile():

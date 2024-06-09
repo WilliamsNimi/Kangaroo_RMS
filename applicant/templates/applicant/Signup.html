@@ -17,6 +17,7 @@
         </div>
         <div class="right-pane">
             <form class="form-elements" action="{{ url_for('applicant_bp.create_applicant_new') }}", method="post">
+                <p style="color:rgb(235, 9, 20);" class="message">{{message}}</p>
                 <div class="input-flex">
                     <label for="name">First Name</label>
                     <input type="text" name="first_name" id="first_name" placeholder="Enter your First Name">
