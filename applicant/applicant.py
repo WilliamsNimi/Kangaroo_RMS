@@ -161,7 +161,8 @@ def create_applicant_new():
         if applicantObj:
             return redirect(url_for('applicant_bp.applicant_login_get'))
         return jsonify({'success': False})
-    except Exception:
+    except Exception as e:
+        print(e)
         return jsonify({'success': False, 'message': 'user already exists'}), 409
 
 @applicant_bp.route('/applicant/profile/update', methods=['PUT'], strict_slashes=False)
