@@ -322,11 +322,11 @@ class DB:
         return vacancy_list
 
     def show_all_recruiters(self):
-        """Displays all the vacancies in the vacancy table"""
+        """Displays all Recruiters in the database"""
         recruiter_list = []
         recruiters = self._session.query(Recruiter).all()
         for recruiter in recruiters:
-            recruiter_list.append(recruiter.recruiter_id)
+            recruiter_list.append((recruiter.full_name, recruiter.email))
         return recruiter_list
 
     def show_all_bps(self):
@@ -334,7 +334,7 @@ class DB:
         bp_list = []
         bps = self._session.query(BusinessPartner).all()
         for bp in bps:
-            bp_list.append(bp.email)
+            bp_list.append((bp.full_name, bp.email))
         return bp_list
 
     def show_all_applicants(self):

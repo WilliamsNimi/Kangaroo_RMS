@@ -67,27 +67,7 @@ def bp_login_get():
 def bp_login_post():
     """
     Business Partner login
-    try:
-        bp_dict = request.form.to_dict()
-        if bp_dict:
-            bp_details = bp_auth.verify_credentials(**bp_dict)
-            if bp_details:
-                setattr(g, bp_details[0], bp_details[1])
-                response = make_response(redirect(url_for('business_partner_bp.bp_homepage')))
-                session_token = session_auth.create_session('business_partner', bp_details[1])
-                response.set_cookie(
-                    'session_token', 
-                    str(session_token), 
-                    httponly=True, 
-                    secure=False, 
-                    path='/kangaroo/v1/bp'
-                    # samesite='Lax'
-                )
-                return response
-        return redirect(url_for('business_partner_bp.bp_login_get'))
-    except Exception as error:
-        print(error)
-        return redirect(url_for('business_partner_bp.bp_login_get'))"""
+    """
 
     if request.method == 'POST' and 'email' in request.form and 'password' in request.form:
         email = request.form['email']
@@ -140,35 +120,8 @@ def create_bp():
 @business_partner_bp.route('/bp/requisitions', methods=['POST'], strict_slashes=False)
 def bp_post_vacancy():
     """
-    Creates job to be posted if requisition-id exists
-    
-    if not request.form.to_dict():
-        abort(400)
-    vacancy_details = request.form.to_dict()
-    vacancy_list = ['job_title', 'department', 'unit',
-                'line_manager', 'number_of_open_positions',
-                'location', 'job_description_summary', 'recruiter_id']
-    if not all(vacancy_details.get(detail) for detail in vacancy_list):
-        abort(400)
-    job_title = vacancy_details.get('job_title')
-    department = vacancy_details.get('department')
-    unit = vacancy_details.get('unit')
-    line_manager = vacancy_details.get('line_manager')
-    number_of_open_positions = vacancy_details.get('no_open_positions')
-    location = vacancy_details.get('location')
-    job_description_summary = vacancy_details.get('jd_summary')
-    
-    try:
-        vacancy_created = bp.make_requisition(job_title, department, unit, line_manager, number_of_open_positions, 
-                                              location, job_description_summary) 
-        if vacancy_created:
-            del vacancy_created.__dict__["_sa_instance_state"]
-            vacancy_created.__dict__['__class__'] = (str(type(vacancy_created)).split('.')[-1]).split('\'')[0]
-            vacancy_created.__dict__['date_of_requisition'] = vacancy_created.date_of_requisition.isoformat()
-            return jsonify({'success': True, 'vacancy': vacancy_created.__dict__}), 201
-    except Exception as error:
-        print(error)
-        return jsonify({'success': False}), 500 """
+    Makes a requisition
+    """
 
     if request.method == 'POST':
         job_title = request.form['job_title']
@@ -180,7 +133,7 @@ def bp_post_vacancy():
         job_description_summary = request.form['jd_summary']
         bp.make_requisition(job_title, department, unit, line_manager, number_of_open_positions, location, job_description_summary)
         return redirect(url_for("business_partner_bp.bp_homepage"))
-    return render_template("businesspartner/SignIn.html")
+    return redirect(url_for("business_partner_bp.bp_homepage"))
 
 @business_partner_bp.route('/bp/profile/update', methods=['PUT'], strict_slashes=False)
 def bp_update_profile():

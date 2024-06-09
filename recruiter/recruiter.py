@@ -11,7 +11,6 @@ import bcrypt
 email_ = ""
 fullName = ""
 message = ""
-
 # Defining a blueprint
 recruiter_bp = Blueprint(
     'recruiter_bp', __name__,
@@ -56,27 +55,7 @@ def recruiter_login_post():
     """
     Recruiter login
     
-    try:
-        recruiter_dict = request.form.to_dict()
-        if recruiter_dict:
-            recruiter_details = recruiter_auth.verify_credentials(**recruiter_dict)
-            if recruiter_details:
-                setattr(g, recruiter_details[0], recruiter_details[1])
-                response = make_response(redirect(url_for('recruiter_bp.recruiter_homepage')))
-                session_token = session_auth.create_session('recruiter', recruiter_details[1])
-                response.set_cookie(
-                    'session_token', 
-                    str(session_token), 
-                    httponly=True, 
-                    secure=False,
-                    path='/kangaroo/v1/recruiter'
-                    # samesite='Lax'
-                )
-                return response
-        return redirect(url_for('recruiter_bp.recruiter_homepage'))
-    except Exception as error:
-        print(error)
-        return redirect(url_for('recruiter_bp.recruiter_login_get')) """
+    """
     
     if request.method == 'POST' and 'email' in request.form and 'password' in request.form:
         email = request.form['email']
@@ -93,7 +72,9 @@ def recruiter_login_post():
                 return redirect(url_for("recruiter_bp.recruiter_homepage", full_name=recruiter_.full_name, email=recruiter_.email))
         except Exception:
             error_message =  "Username or Password incorrect"
+    error_message =  "Username or Password incorrect"
     return render_template("recruiter/SignIn.html", error_message=error_message)
+
 
 @recruiter_bp.route('/recruiter/logout', methods=['GET', 'POST'], strict_slashes=False)
 def recruiter_logout():
@@ -294,3 +275,12 @@ def bp_creation():
     except Exception:
         message = "Business Partner with " + email + " already exists."
         return render_template('recruiter/newBP.html', full_name=fullName, email=email_, message=message)
+
+@recruiter_bp.route('/recruiter/showProfiledUsers', methods=['GET'], strict_slashes=False)
+def show_profiled_users():
+    """
+    Shows list of profiled users
+    """
+    recruiters = recruiter.show_all_recruiters()
+    bps =  recruiter.show_all_business_partners()
+    return render_template('recruiter/profiledUsers.html', recruiters=recruiters, bps=bps)

@@ -126,3 +126,11 @@ class Recruiter:
     def show_all_vacancies(self):
         """ Retrieve all vacancies"""
         return backend_core.db.show_all_vacancies()
+
+    def show_all_recruiters(self):
+        """ Retrieve all recruiters"""
+        return backend_core.db.show_all_recruiters()
+
+    def show_all_business_partners(self):
+        """ Retrieve all profiled business partners"""
+        return backend_core.db.show_all_bps()

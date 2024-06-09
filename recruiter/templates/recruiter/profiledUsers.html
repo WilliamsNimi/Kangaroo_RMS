@@ -86,8 +86,8 @@
               <div class="page-nav-content">
                 <div class="page-nav">
                   <a href="{{ url_for('recruiter_bp.recruiter_homepage') }}">
-                    <div class="page-nav-item-active">
-                      <div class="page-nav-indicator-active"></div>
+                    <div class="page-nav-item">
+                      <div class="page-nav-indicator"></div>
                       <div>
                         <h3 class="pni-header">Home</h3>
                         <div class="pni-desc">
@@ -119,8 +119,8 @@
                     </div>
                   </a>
                   <a href="{{ url_for('recruiter_bp.show_profiled_users') }}">
-                    <div class="page-nav-item">
-                      <div class="page-nav-indicator"></div>
+                    <div class="page-nav-item-active">
+                      <div class="page-nav-indicator-active"></div>
                       <div>
                         <h3 class="pni-header">Show Profiled Users</h3>
                         <div class="pni-desc">
@@ -131,16 +131,25 @@
                   </a>
                 </div>
                 <div class="page-content">
-                  {%for job in jobs%}
+                  <p> Recruiters</p>
+                  {%for recruiter in recruiters%}
                   <div class="job-card-flex">
                     <div>
-                      <div class="job-title">Job Title: <span>{{job[0]}}</span></div>
-                      <div class="job-title">Approval Status: <span>{{job[3]}}</span></div>
-                      <div class="job-title">Location: <span>{{job[2]}}</span></div>
+                      <div class="job-title">Full Name: <span>{{recruiter[0]}}</span></div>
                     </div>
                     <div>
-                      <div class="job-title">Number of Applicants: <span></span></div>
-                      <div class="job-title">Number of Open Positions: <span>{{job[1]}}</span></div>
+                      <div class="job-title">Email: <span>{{recruiter[1]}}</span></div>
+                    </div>
+                  </div>
+                  {%endfor%} 
+                  <p> Business Partners</p>
+                  {%for bp in bps%}
+                  <div class="job-card-flex">
+                    <div>
+                      <div class="job-title">Full Name: <span>{{bp[0]}}</span></div>
+                    </div>
+                    <div>
+                      <div class="job-title">Email: <span>{{bp[1]}}</span></div>
                     </div>
                   </div>
                   {%endfor%} 
