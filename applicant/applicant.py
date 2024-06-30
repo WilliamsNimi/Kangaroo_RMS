@@ -71,28 +71,7 @@ def applicant_login_get():
 def applicant_login_post():
     """
     Applicant login
-    
-    try:
-        applicant_dict = request.form.to_dict()
-        if applicant_dict:
-            applicant_details = applicant_auth.verify_credentials(**applicant_dict)
-            if applicant_details:
-                setattr(g, applicant_details[0], applicant_details[1])
-                response = make_response(redirect(url_for('applicant_bp.applicant_homepage')))        
-                session_token = session_auth.create_session('applicant', applicant_details[1])
-                response.set_cookie(
-                    'session_token',
-                    str(session_token),
-                    httponly=True,
-                    secure=False,
-                    path='/kangaroo/v1/applicant'
-                    # samesite='Lax'
-                )
-                return response
-        return redirect(url_for('applicant_bp.applicant_login_get'))
-    except Exception as error:
-        print(error)
-        return redirect(url_for('applicant_bp.applicant_login_get')) """
+     """
     if request.method == 'POST' and 'email' in request.form and 'password' in request.form:
         email = request.form['email']
         password = request.form['password']
