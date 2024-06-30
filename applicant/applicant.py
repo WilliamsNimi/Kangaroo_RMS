@@ -1,3 +1,13 @@
+"""
+TODO:
+        1. Applicants should be able to apply.
+        2. Applicants should be able to search for vacancies.
+        3. Applicants should be able to see list of vacancies they applied for.
+GLOBAL: 
+        1. Implement password Regex.
+        2. Implement SQL injection checks for all forms.
+        3. Implement Session Management for Logout.
+"""
 from flask import Blueprint
 from flask import jsonify, abort, render_template, request, make_response
 from flask import g, url_for, redirect

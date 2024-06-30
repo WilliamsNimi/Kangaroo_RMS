@@ -1,5 +1,12 @@
 """ 
-1. make_requisition /requisitions POST 'makes a vacancy request to the recruiter'
+TODO:
+        1. Give Business Partner list of available recruiters to choose from.
+        2. Only roles a business partner raised should be visible to them.
+
+        GLOBAL: 
+        1. Implement password Regex.
+        2. Implement SQL injection checks for all forms.
+        3. Implement Session Management for Logout.
 """
 from flask import request, abort, render_template, jsonify, url_for
 from flask import g, redirect, make_response

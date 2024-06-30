@@ -1,5 +1,17 @@
 """
 API endpoint for recruiters
+TODO: 
+        1. Create a difference between Super Recruiter and Recruiter.
+        2. Super Recruiter should be able to reassign recruiter to other roles.
+        3. Recruiter should be able to approve vacancies raised by Business partner.
+        4. Only super recruiter should be able to see vacancies raised by any business partner. 
+        5. Recruiters should only see vacancies raised and assigned to them.
+        6. Show recruitment analytics to recruiters and a full view to super recruiter.
+
+        GLOBAL: 
+        1. Implement password Regex.
+        2. Implement SQL injection checks for all forms.
+        3. Implement Session Management for Logout.
 """
 from flask import request, abort, jsonify, g, redirect, url_for, flash
 from flask import render_template, make_response
